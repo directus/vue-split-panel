@@ -1,7 +1,8 @@
-import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
+import vueDevTools from 'vite-plugin-vue-devtools';
 
 export default defineConfig({
-  root: './playground',
-  plugins: [vue()],
-})
+	root: './playground',
+	plugins: [vue(), vueDevTools()],
+});
