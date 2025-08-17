@@ -95,11 +95,15 @@ const gridTemplate = computed(() => {
 
 <template>
 	<div ref="split-panel" class="split-panel">
-		<slot name="start" />
+		<div class="start">
+			<slot name="start" />
+		</div>
 		<div ref="divider" class="divider">
 			<slot name="divider" />
 		</div>
-		<slot name="end" />
+		<div class="end">
+			<slot name="end" />
+		</div>
 	</div>
 </template>
 
@@ -107,6 +111,10 @@ const gridTemplate = computed(() => {
 .split-panel {
 	display: grid;
 	grid-template-columns: v-bind(gridTemplate);
+}
+
+.start, .end {
+	overflow: hidden;
 }
 
 .divider {
@@ -117,8 +125,9 @@ const gridTemplate = computed(() => {
 		content: '';
 		position: absolute;
 		block-size: 100%;
-		inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerHitArea) / 2);
+		inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerWidth) * 1px / 2);
 		inline-size: v-bind(dividerHitArea);
+		cursor: ew-resize;
 	}
 }
 </style>
