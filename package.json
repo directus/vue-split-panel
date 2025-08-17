@@ -1,6 +1,8 @@
 {
 	"name": "@rijk/vue-split-panel",
+	"type": "module",
 	"version": "0.0.1",
+	"packageManager": "pnpm@10.14.0",
 	"description": "Split panel component for Vue based on WebAwesome Split Panel",
 	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
 	"homepage": "https://github.com/rijkvanzanten/vue-split-panel",
@@ -35,23 +37,30 @@
 		"test": "vitest",
 		"typecheck": "vue-tsc --noEmit",
 		"release": "bumpp && pnpm publish",
-		"prepublishOnly": "pnpm run build"
+		"prepublishOnly": "pnpm run build",
+		"lint": "eslint --flag v10_config_lookup_from_file --cache .",
+		"lint:fix": "pnpm run lint --fix"
 	},
 	"peerDependencies": {
 		"vue": ">= 3.2.0"
 	},
 	"devDependencies": {
+		"@directus/eslint-config": "https://pkg.pr.new/directus/eslint-config/@directus/eslint-config@a8261b0",
 		"@types/node": "24.3.0",
 		"@vitejs/plugin-vue": "6.0.1",
 		"@vue/test-utils": "2.4.6",
 		"bumpp": "10.2.3",
+		"eslint": "9.33.0",
 		"happy-dom": "18.0.1",
 		"tsdown": "0.14.1",
 		"typescript": "5.9.2",
 		"vite": "npm:rolldown-vite@latest",
+		"vite-plugin-vue-devtools": "8.0.0",
 		"vitest": "3.2.4",
 		"vue": "3.5.18",
 		"vue-tsc": "3.0.5"
 	},
-	"packageManager": "pnpm@10.14.0"
+	"dependencies": {
+		"@vueuse/core": "13.6.0"
+	}
 }

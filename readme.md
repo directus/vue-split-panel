@@ -1,3 +1,3 @@
 # Vue Split Panel
 
-Vue native port of [Web Awesome's Split Panel](https://webawesome.com/docs/components/split-panel/).
+Splitter component based on the usage syntax of Reka UI but using the internal rendering logic of Web Awesome's Split Panel.

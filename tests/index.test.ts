@@ -1,10 +1,10 @@
-import { mount } from '@vue/test-utils'
-import { expect, test } from 'vitest'
-import { HelloWorld } from '../src'
+import { mount } from '@vue/test-utils';
+import { expect } from 'vitest';
+import { HelloWorld } from '../src';
 
-test('button', () => {
-  const app = mount(HelloWorld);
+it('button', () => {
+	const app = mount(HelloWorld);
 
-  expect(app.text()).toMatchInlineSnapshot(`"Hello World"`)
-  expect(app.html()).toMatchInlineSnapshot(`"<h1>Hello World</h1>"`)
-})
+	expect(app.text()).toMatchInlineSnapshot('"Hello World"');
+	expect(app.html()).toMatchInlineSnapshot('"<h1>Hello World</h1>"');
+});
