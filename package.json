@@ -1,0 +1,54 @@
+{
+	"name": "@rijk/vue-split-panel",
+	"version": "0.0.1",
+	"description": "Split panel component for Vue based on WebAwesome Split Panel",
+	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
+	"homepage": "https://github.com/rijkvanzanten/vue-split-panel",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rijkvanzanten/vue-split-panel.git"
+	},
+	"bugs": {
+		"url": "https://github.com/rijkvanzanten/vue-split-panel/issues"
+	},
+	"keywords": [
+		"vue",
+		"ui",
+		"components"
+	],
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"import": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"src",
+		"dist"
+	],
+	"scripts": {
+		"build": "pnpm type-check && pnpm build-only",
+		"build-only": "tsdown",
+		"watch": "tsdown --watch",
+		"type-check": "vue-tsc -p tsconfig.check.json --noEmit",
+		"test": "vitest",
+		"test-update": "vitest -u",
+		"pub:release": "pnpm publish --no-git-checks --access public"
+	},
+	"peerDependencies": {
+		"vue": ">= 3.2.0"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "6.0.1",
+		"vite": "7.1.2",
+		"vitest": "3.2.4",
+		"vitest-axe": "0.1.0",
+		"vue": "3.5.18",
+		"vue-tsc": "3.0.5"
+	},
+	"packageManager": "pnpm@10.14.0"
+}
