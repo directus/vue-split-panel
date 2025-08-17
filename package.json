@@ -26,27 +26,30 @@
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"files": [
-		"src",
 		"dist"
 	],
 	"scripts": {
-		"build": "pnpm type-check && pnpm build-only",
-		"build-only": "tsdown",
-		"watch": "tsdown --watch",
-		"type-check": "vue-tsc -p tsconfig.check.json --noEmit",
+		"build": "tsdown",
+		"dev": "tsdown --watch",
+		"playground": "vite",
 		"test": "vitest",
-		"test-update": "vitest -u",
-		"pub:release": "pnpm publish --no-git-checks --access public"
+		"typecheck": "vue-tsc --noEmit",
+		"release": "bumpp && pnpm publish",
+		"prepublishOnly": "pnpm run build"
 	},
 	"peerDependencies": {
 		"vue": ">= 3.2.0"
 	},
-	"dependencies": {},
 	"devDependencies": {
+		"@types/node": "24.3.0",
 		"@vitejs/plugin-vue": "6.0.1",
-		"vite": "7.1.2",
+		"@vue/test-utils": "2.4.6",
+		"bumpp": "10.2.3",
+		"happy-dom": "18.0.1",
+		"tsdown": "0.14.1",
+		"typescript": "5.9.2",
+		"vite": "npm:rolldown-vite@latest",
 		"vitest": "3.2.4",
-		"vitest-axe": "0.1.0",
 		"vue": "3.5.18",
 		"vue-tsc": "3.0.5"
 	},
