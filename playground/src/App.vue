@@ -3,7 +3,7 @@ import { SplitPanel } from '../../src';
 </script>
 
 <template>
-	<SplitPanel class="split" min="150px" max="500px" primary="start">
+	<SplitPanel class="split" min="150px" :size="200" size-unit="px" max="500px" primary="start">
 		<template #start>
 			<div class="panel">
 				<p>Panel A</p>
