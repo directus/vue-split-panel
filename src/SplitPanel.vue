@@ -150,7 +150,9 @@ const gridTemplate = computed(() => {
 			<slot name="start" />
 		</div>
 		<div ref="divider" class="divider" :class="[{ disabled }, orientation]">
-			<slot name="divider" />
+			<slot name="divider">
+				<div />
+			</slot>
 		</div>
 		<div class="end">
 			<slot name="end" />
@@ -178,16 +180,18 @@ const gridTemplate = computed(() => {
 .divider:not(.disabled) {
 	position: relative;
 
-	&::after {
-		content: '';
-		position: absolute;
+	& :deep(> :first-child) {
+		&::after {
+			content: '';
+			position: absolute;
+		}
 	}
 
 	&.horizontal {
-		inline-size: max-content;
 		block-size: 100%;
+		inline-size: 0;
 
-		&::after {
+		& :deep(> :first-child)::after {
 			block-size: 100%;
 			inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
 			inset-block-start: 0;
@@ -198,9 +202,9 @@ const gridTemplate = computed(() => {
 
 	&.vertical {
 		inline-size: 100%;
-		block-size: max-content;
+		block-size: 0;
 
-		&::after {
+		& :deep(> :first-child)::after {
 			inline-size: 100%;
 			inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
 			inset-inline-start: 0;
