@@ -1,15 +1,18 @@
 <script lang="ts">
 export interface SplitPanelProps {
-	/** Sets the split panel's direction. */
-	direction?: 'horizontal' | 'vertical';
+	/** Sets the split panel's orientation */
+	orientation?: 'horizontal' | 'vertical';
 
-	/** If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the host element is resized. */
+	/** Sets the split panel's text direction */
+	direction?: 'ltr' | 'rtl';
+
+	/** If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the panels component is resized */
 	primary?: 'start' | 'end';
 
-	/** The minimum allowed size of the primary panel. */
+	/** The minimum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
 	min?: string;
 
-	/** The maximum allowed size of the primary panel. */
+	/** The maximum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
 	max?: string;
 
 	/** The invisible region around the divider where dragging can occur. This is usually wider than the divider to facilitate easier dragging. */
@@ -39,6 +42,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	max: '100%',
 	dividerHitArea: '12px',
 	sizeUnit: '%',
+	direction: 'ltr',
 });
 
 const panelEl = useTemplateRef('split-panel');
@@ -48,6 +52,7 @@ const { width: panelsWidth } = useElementSize(panelEl);
 const { width: dividerWidth } = useElementSize(dividerEl);
 const { x: dividerX } = useDraggable(dividerEl, { containerElement: panelEl });
 
+/** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
 const size = defineModel<number>('size', { default: 50 });
 
 const sizePercentage = computed({
@@ -87,7 +92,13 @@ onMounted(() => {
 });
 
 watch(dividerX, (newX) => {
-	sizePercentage.value = clamp(pixelsToPercentage(panelsWidth.value, newX), 0, 100);
+	let newPositionInPixels = newX;
+
+	if (props.primary === 'end') {
+		newPositionInPixels = panelsWidth.value - newPositionInPixels;
+	}
+
+	sizePercentage.value = clamp(pixelsToPercentage(panelsWidth.value, newPositionInPixels), 0, 100);
 });
 
 watch(sizePixels, (newPixels, oldPixels) => {
