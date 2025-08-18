@@ -20,6 +20,9 @@ export interface SplitPanelProps {
 
 	/** Whether the size v-model should be in relative percentages or absolute pixels */
 	sizeUnit?: '%' | 'px';
+
+	/** Disable the manual resizing of the panels */
+	disabled?: boolean;
 }
 
 export interface SplitPanelEmits {
@@ -29,7 +32,7 @@ export interface SplitPanelEmits {
 
 <script lang="ts" setup>
 import { clamp, useDraggable, useElementSize, useResizeObserver } from '@vueuse/core';
-import { computed, defineProps, onMounted, useTemplateRef, watch, withDefaults } from 'vue';
+import { computed, onMounted, useTemplateRef, watch } from 'vue';
 import { percentageToPixels } from './utils/percentage-to-pixels';
 import { pixelsToPercentage } from './utils/pixels-to-percentage';
 
@@ -92,6 +95,8 @@ onMounted(() => {
 });
 
 watch(dividerX, (newX) => {
+	if (props.disabled) return;
+
 	let newPositionInPixels = newX;
 
 	if (props.primary === 'end') {
@@ -133,7 +138,7 @@ const gridTemplate = computed(() => {
 		<div class="start">
 			<slot name="start" />
 		</div>
-		<div ref="divider" class="divider">
+		<div ref="divider" class="divider" :disabled="disabled">
 			<slot name="divider" />
 		</div>
 		<div class="end">
@@ -156,7 +161,7 @@ const gridTemplate = computed(() => {
 	width: max-content;
 	position: relative;
 
-	&::after {
+	&:not([disabled])::after {
 		content: '';
 		position: absolute;
 		block-size: 100%;
