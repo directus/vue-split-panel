@@ -9,13 +9,7 @@ export interface SplitPanelProps {
 	/** If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the panels component is resized */
 	primary?: 'start' | 'end';
 
-	/** The minimum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
-	min?: string;
-
-	/** The maximum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
-	max?: string;
-
-	/** The invisible region around the divider where dragging can occur. This is usually wider than the divider to facilitate easier dragging. */
+	/** The invisible region around the divider where dragging can occur. This is usually wider than the divider to facilitate easier dragging. CSS value */
 	dividerHitArea?: string;
 
 	/** Whether the size v-model should be in relative percentages or absolute pixels */
@@ -23,6 +17,15 @@ export interface SplitPanelProps {
 
 	/** Disable the manual resizing of the panels */
 	disabled?: boolean;
+
+	/** The minimum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
+	minSize?: string;
+
+	/** The maximum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
+	maxSize?: string;
+
+	/** Whether to allow the primary panel to be collapsed on enter key on divider or when the collapse threshold is met */
+	collapsible?: boolean;
 }
 </script>
 
@@ -37,11 +40,12 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	orientation: 'horizontal',
 	disabled: false,
 	snapThreshold: 12,
-	min: '0px',
-	max: '100%',
+	minSize: '0px',
+	maxSize: '100%',
 	dividerHitArea: '12px',
 	sizeUnit: '%',
 	direction: 'ltr',
+	collapsible: false,
 });
 
 const panelEl = useTemplateRef('split-panel');
@@ -54,6 +58,9 @@ const { width: dividerWidth, height: dividerHeight } = useElementSize(dividerEl)
 const dividerSize = computed(() => props.orientation === 'horizontal' ? dividerWidth.value : dividerHeight.value);
 
 const { x: dividerX, y: dividerY } = useDraggable(dividerEl, { containerElement: panelEl });
+
+/** Whether the primary column is collapsed or not */
+const collapsed = defineModel<boolean>('collapsed', { default: false });
 
 /** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
 const primaryPanelSize = defineModel<number>('size', { default: 50 });
@@ -86,6 +93,18 @@ const primaryPanelSizePixels = computed({
 			primaryPanelSize.value = pixelsToPercentage(componentSize.value, newValue);
 		}
 	},
+});
+
+let expandedPrimaryPanelSizePercentage = 0;
+
+watch(collapsed, (newCollapsed) => {
+	if (newCollapsed === true) {
+		expandedPrimaryPanelSizePercentage = primaryPanelSizePercentage.value;
+		primaryPanelSizePercentage.value = 0;
+	}
+	else {
+		primaryPanelSizePercentage.value = expandedPrimaryPanelSizePercentage;
+	}
 });
 
 let cachedPrimaryPanelSizePixels = 0;
@@ -153,12 +172,10 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 		primaryPanelSizePercentage.value = clamp(newPosition, 0, 100);
 	}
-
-	// TODO handle enter key collapsing / opening the primary panel
 };
 
 const gridTemplate = computed(() => {
-	const primary = `clamp(0%, clamp(${props.min}, ${primaryPanelSizePercentage.value}%, ${props.max}), calc(100% - ${dividerSize.value}px))`;
+	const primary = `clamp(0%, clamp(${props.minSize}, ${primaryPanelSizePercentage.value}%, ${props.maxSize}), calc(100% - ${dividerSize.value}px))`;
 	const secondary = 'auto';
 
 	if (!props.primary || props.primary === 'start') {
@@ -178,10 +195,16 @@ const gridTemplate = computed(() => {
 		}
 	}
 });
+
+const collapse = () => collapsed.value = true;
+const expand = () => collapsed.value = false;
+const toggle = (val: boolean) => collapsed.value = val;
+
+defineExpose({ collapse, expand, toggle });
 </script>
 
 <template>
-	<div ref="split-panel" class="split-panel" :class="orientation">
+	<div ref="split-panel" class="split-panel" :class="[orientation, { collapsed }]">
 		<div class="start">
 			<slot name="start" />
 		</div>
