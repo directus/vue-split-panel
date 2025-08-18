@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	orientation: 'horizontal',
 	disabled: false,
 	snapThreshold: 12,
-	min: '0',
+	min: '0px',
 	max: '100%',
 	dividerHitArea: '12px',
 	sizeUnit: '%',
@@ -125,7 +125,7 @@ const gridTemplate = computed(() => {
 	const primary = `clamp(0%, clamp(${props.min}, ${primaryPanelSizePercentage.value}%, ${props.max}), calc(100% - ${dividerSize.value}px))`;
 	const secondary = 'auto';
 
-	if (props.primary === 'start') {
+	if (!props.primary || props.primary === 'start') {
 		if (props.direction === 'ltr' || props.orientation === 'vertical') {
 			return `${primary} ${dividerSize.value}px ${secondary}`;
 		}
@@ -149,7 +149,12 @@ const gridTemplate = computed(() => {
 		<div class="start">
 			<slot name="start" />
 		</div>
-		<div ref="divider" class="divider" :class="[{ disabled }, orientation]">
+		<div
+			ref="divider"
+			class="divider"
+			:class="[{ disabled }, orientation]"
+			:tabindex="disabled ? undefined : 0"
+		>
 			<slot name="divider">
 				<div />
 			</slot>
