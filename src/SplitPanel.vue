@@ -114,13 +114,6 @@ const maxSizePercentage = computed(() => {
 	return pixelsToPercentage(componentSize.value, props.maxSize);
 });
 
-const maxSizePixels = computed(() => {
-	if (props.maxSize === undefined) return;
-
-	if (props.sizeUnit === 'px') return props.maxSize;
-	return percentageToPixels(componentSize.value, props.maxSize);
-});
-
 let expandedSizePercentage = 0;
 
 /** Whether the primary column is collapsed or not */
@@ -142,7 +135,9 @@ onMounted(() => {
 	cachedSizePixels = sizePixels.value;
 });
 
-const { x: dividerX, y: dividerY } = useDraggable(dividerEl, { containerElement: panelEl });
+const { x: dividerX, y: dividerY, isDragging } = useDraggable(dividerEl, { containerElement: panelEl });
+
+let hasToggledDuringCurrentDrag = false;
 
 watch([dividerX, dividerY], ([newX, newY]) => {
 	if (props.disabled) return;
@@ -153,17 +148,25 @@ watch([dividerX, dividerY], ([newX, newY]) => {
 		newPositionInPixels = componentSize.value - newPositionInPixels;
 	}
 
-	// if (props.collapsible && props.minSize !== undefined && props.collapseThreshold !== undefined) {
-	// 	const threshold = props.minSize - (props.collapseThreshold ?? 0);
+	if (props.collapsible && minSizePixels.value !== undefined && props.collapseThreshold !== undefined && hasToggledDuringCurrentDrag === false) {
+		const collapseThreshold = minSizePixels.value - (props.collapseThreshold ?? 0);
+		const expandThreshold = (props.collapseThreshold ?? 0);
 
-	// 	console.log(threshold, newPositionInPixels);
-
-	// 	if (newPositionInPixels < threshold) {
-	// 		collapsed.value = true;
-	// 	}
-	// }
+		if (newPositionInPixels < collapseThreshold && collapsed.value === false) {
+			collapsed.value = true;
+			hasToggledDuringCurrentDrag = true;
+		}
+		else if (newPositionInPixels > expandThreshold && collapsed.value === true) {
+			collapsed.value = false;
+			hasToggledDuringCurrentDrag = true;
+		}
+	}
 
 	sizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
+});
+
+watch(isDragging, (newDragging) => {
+	if (newDragging === false) hasToggledDuringCurrentDrag = false;
 });
 
 watch(sizePixels, (newPixels, oldPixels) => {
@@ -216,7 +219,12 @@ const handleKeydown = (event: KeyboardEvent) => {
 };
 
 const gridTemplate = computed(() => {
-	const primary = `clamp(0%, clamp(${minSizePercentage.value}%, ${sizePercentage.value}%, ${maxSizePercentage.value}%), calc(100% - ${dividerSize.value}px))`;
+	let primary = `clamp(0%, clamp(${minSizePercentage.value}%, ${sizePercentage.value}%, ${maxSizePercentage.value}%), calc(100% - ${dividerSize.value}px))`;
+
+	if (collapsed.value) {
+		primary = '0';
+	}
+
 	const secondary = 'auto';
 
 	if (!props.primary || props.primary === 'start') {
@@ -245,7 +253,7 @@ defineExpose({ collapse, expand, toggle });
 </script>
 
 <template>
-	<div ref="split-panel" class="split-panel" :class="[orientation, { collapsed }]">
+	<div ref="split-panel" class="split-panel" :class="[orientation, { collapsed, dragging: isDragging }]">
 		<div class="start">
 			<slot name="start" />
 		</div>
@@ -281,6 +289,10 @@ defineExpose({ collapse, expand, toggle });
 
 	&.vertical {
 		grid-template-rows: v-bind(gridTemplate);
+	}
+
+	&.dragging {
+		user-select: none;
 	}
 }
 
