@@ -153,6 +153,8 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 		primaryPanelSizePercentage.value = clamp(newPosition, 0, 100);
 	}
+
+	// TODO handle enter key collapsing / opening the primary panel
 };
 
 const gridTemplate = computed(() => {
