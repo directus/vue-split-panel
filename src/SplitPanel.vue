@@ -24,10 +24,6 @@ export interface SplitPanelProps {
 	/** Disable the manual resizing of the panels */
 	disabled?: boolean;
 }
-
-export interface SplitPanelEmits {
-	reposition: [];
-}
 </script>
 
 <script lang="ts" setup>
@@ -62,7 +58,7 @@ const { x: dividerX, y: dividerY } = useDraggable(dividerEl, { containerElement:
 /** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
 const primaryPanelSize = defineModel<number>('size', { default: 50 });
 
-const sizePercentage = computed({
+const primaryPanelSizePercentage = computed({
 	get() {
 		if (props.sizeUnit === '%') return primaryPanelSize.value;
 		return pixelsToPercentage(componentSize.value, primaryPanelSize.value);
@@ -77,7 +73,7 @@ const sizePercentage = computed({
 	},
 });
 
-const sizePixels = computed({
+const primaryPanelSizePixels = computed({
 	get() {
 		if (props.sizeUnit === 'px') return primaryPanelSize.value;
 		return percentageToPixels(componentSize.value, primaryPanelSize.value);
@@ -92,10 +88,10 @@ const sizePixels = computed({
 	},
 });
 
-let cachedSizePx = 0;
+let cachedPrimaryPanelSizePixels = 0;
 
 onMounted(() => {
-	cachedSizePx = sizePixels.value;
+	cachedPrimaryPanelSizePixels = primaryPanelSizePixels.value;
 });
 
 watch([dividerX, dividerY], ([newX, newY]) => {
@@ -107,12 +103,12 @@ watch([dividerX, dividerY], ([newX, newY]) => {
 		newPositionInPixels = componentSize.value - newPositionInPixels;
 	}
 
-	sizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
+	primaryPanelSizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
 });
 
-watch(sizePixels, (newPixels, oldPixels) => {
+watch(primaryPanelSizePixels, (newPixels, oldPixels) => {
 	if (newPixels === oldPixels) return;
-	cachedSizePx = newPixels;
+	cachedPrimaryPanelSizePixels = newPixels;
 });
 
 useResizeObserver(panelEl, (entries) => {
@@ -121,12 +117,12 @@ useResizeObserver(panelEl, (entries) => {
 	const size = props.orientation === 'horizontal' ? width : height;
 
 	if (props.primary) {
-		sizePercentage.value = pixelsToPercentage(size, cachedSizePx);
+		primaryPanelSizePercentage.value = pixelsToPercentage(size, cachedPrimaryPanelSizePixels);
 	}
 });
 
 const gridTemplate = computed(() => {
-	const primary = `clamp(0%, clamp(${props.min}, ${sizePercentage.value}%, ${props.max}), calc(100% - ${dividerSize.value}px))`;
+	const primary = `clamp(0%, clamp(${props.min}, ${primaryPanelSizePercentage.value}%, ${props.max}), calc(100% - ${dividerSize.value}px))`;
 	const secondary = 'auto';
 
 	if (props.primary === 'start') {
@@ -179,27 +175,38 @@ const gridTemplate = computed(() => {
 	overflow: hidden;
 }
 
-.divider {
+.divider:not(.disabled) {
 	position: relative;
 
-	&:not(.disabled)::after {
+	&::after {
 		content: '';
 		position: absolute;
-		cursor: ew-resize;
 	}
 
-	&.horizontal:not(.disabled)::after {
+	&.horizontal {
+		inline-size: max-content;
 		block-size: 100%;
-		inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
-		inset-block-start: 0;
-		inline-size: v-bind(dividerHitArea);
+
+		&::after {
+			block-size: 100%;
+			inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+			inset-block-start: 0;
+			inline-size: v-bind(dividerHitArea);
+			cursor: ew-resize;
+		}
 	}
 
-	&.vertical:not(.disabled)::after {
+	&.vertical {
 		inline-size: 100%;
-		inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
-		inset-inline-start: 0;
-		block-size: v-bind(dividerHitArea);
+		block-size: max-content;
+
+		&::after {
+			inline-size: 100%;
+			inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+			inset-inline-start: 0;
+			block-size: v-bind(dividerHitArea);
+			cursor: ns-resize;
+		}
 	}
 }
 </style>
