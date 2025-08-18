@@ -4,7 +4,8 @@ This project includes or derives from the following MIT-licensed works:
 
 - **Web Awesome**\
   Copyright (c) 2023 Fonticons, Inc. Source: https://github.com/shoelace-style/webawesome
-- **Reka UI** Copyright (c) 2023 UnoVue Source: https://github.com/unovue/reka-ui
+- **Reka UI**\
+  Copyright (c) 2023 UnoVue Source: https://github.com/unovue/reka-ui
 
 Each of the above components is licensed under the MIT License.\
 For convenience, the original license texts are reproduced below.

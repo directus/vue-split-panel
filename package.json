@@ -45,6 +45,11 @@
 	"peerDependencies": {
 		"vue": ">= 3.2.0"
 	},
+	"dependencies": {
+		"@vueuse/core": "13.6.0",
+		"pnpm": "10.14.0",
+		"test": "3.3.0"
+	},
 	"devDependencies": {
 		"@directus/eslint-config": "https://pkg.pr.new/directus/eslint-config/@directus/eslint-config@a8261b0",
 		"@types/node": "24.3.0",
@@ -60,10 +65,5 @@
 		"vitest": "3.2.4",
 		"vue": "3.5.18",
 		"vue-tsc": "3.0.5"
-	},
-	"dependencies": {
-		"@vueuse/core": "13.6.0",
-		"pnpm": "10.14.0",
-		"test": "3.3.0"
 	}
 }
