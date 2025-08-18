@@ -18,14 +18,17 @@ export interface SplitPanelProps {
 	/** Disable the manual resizing of the panels */
 	disabled?: boolean;
 
-	/** The minimum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
-	minSize?: string;
+	/** The minimum allowed size of the primary panel */
+	minSize?: number;
 
-	/** The maximum allowed size of the primary panel. Accepts CSS like `"15px"` or `"5em"` */
-	maxSize?: string;
+	/** The maximum allowed size of the primary panel */
+	maxSize?: number;
 
 	/** Whether to allow the primary panel to be collapsed on enter key on divider or when the collapse threshold is met */
 	collapsible?: boolean;
+
+	/** How far to drag beyond the minSize to collapse/expand the primary panel */
+	collapseThreshold?: number;
 }
 </script>
 
@@ -40,8 +43,8 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	orientation: 'horizontal',
 	disabled: false,
 	snapThreshold: 12,
-	minSize: '0px',
-	maxSize: '100%',
+	minSize: 0,
+	maxSize: 100,
 	dividerHitArea: '12px',
 	sizeUnit: '%',
 	direction: 'ltr',
@@ -57,61 +60,89 @@ const componentSize = computed(() => props.orientation === 'horizontal' ? compon
 const { width: dividerWidth, height: dividerHeight } = useElementSize(dividerEl);
 const dividerSize = computed(() => props.orientation === 'horizontal' ? dividerWidth.value : dividerHeight.value);
 
-const { x: dividerX, y: dividerY } = useDraggable(dividerEl, { containerElement: panelEl });
+/** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
+const size = defineModel<number>('size', { default: 50 });
+
+const sizePercentage = computed({
+	get() {
+		if (props.sizeUnit === '%') return size.value;
+		return pixelsToPercentage(componentSize.value, size.value);
+	},
+	set(newValue: number) {
+		if (props.sizeUnit === '%') {
+			size.value = newValue;
+		}
+		else {
+			size.value = percentageToPixels(componentSize.value, newValue);
+		}
+	},
+});
+
+const sizePixels = computed({
+	get() {
+		if (props.sizeUnit === 'px') return size.value;
+		return percentageToPixels(componentSize.value, size.value);
+	},
+	set(newValue: number) {
+		if (props.sizeUnit === 'px') {
+			size.value = newValue;
+		}
+		else {
+			size.value = pixelsToPercentage(componentSize.value, newValue);
+		}
+	},
+});
+
+const minSizePercentage = computed(() => {
+	if (props.minSize === undefined) return;
+
+	if (props.sizeUnit === '%') return props.minSize;
+	return pixelsToPercentage(componentSize.value, props.minSize);
+});
+
+const minSizePixels = computed(() => {
+	if (props.minSize === undefined) return;
+
+	if (props.sizeUnit === 'px') return props.minSize;
+	return percentageToPixels(componentSize.value, props.minSize);
+});
+
+const maxSizePercentage = computed(() => {
+	if (props.maxSize === undefined) return;
+
+	if (props.sizeUnit === '%') return props.maxSize;
+	return pixelsToPercentage(componentSize.value, props.maxSize);
+});
+
+const maxSizePixels = computed(() => {
+	if (props.maxSize === undefined) return;
+
+	if (props.sizeUnit === 'px') return props.maxSize;
+	return percentageToPixels(componentSize.value, props.maxSize);
+});
+
+let expandedSizePercentage = 0;
 
 /** Whether the primary column is collapsed or not */
 const collapsed = defineModel<boolean>('collapsed', { default: false });
 
-/** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
-const primaryPanelSize = defineModel<number>('size', { default: 50 });
-
-const primaryPanelSizePercentage = computed({
-	get() {
-		if (props.sizeUnit === '%') return primaryPanelSize.value;
-		return pixelsToPercentage(componentSize.value, primaryPanelSize.value);
-	},
-	set(newValue: number) {
-		if (props.sizeUnit === '%') {
-			primaryPanelSize.value = newValue;
-		}
-		else {
-			primaryPanelSize.value = percentageToPixels(componentSize.value, newValue);
-		}
-	},
-});
-
-const primaryPanelSizePixels = computed({
-	get() {
-		if (props.sizeUnit === 'px') return primaryPanelSize.value;
-		return percentageToPixels(componentSize.value, primaryPanelSize.value);
-	},
-	set(newValue: number) {
-		if (props.sizeUnit === 'px') {
-			primaryPanelSize.value = newValue;
-		}
-		else {
-			primaryPanelSize.value = pixelsToPercentage(componentSize.value, newValue);
-		}
-	},
-});
-
-let expandedPrimaryPanelSizePercentage = 0;
-
 watch(collapsed, (newCollapsed) => {
 	if (newCollapsed === true) {
-		expandedPrimaryPanelSizePercentage = primaryPanelSizePercentage.value;
-		primaryPanelSizePercentage.value = 0;
+		expandedSizePercentage = sizePercentage.value;
+		sizePercentage.value = 0;
 	}
 	else {
-		primaryPanelSizePercentage.value = expandedPrimaryPanelSizePercentage;
+		sizePercentage.value = expandedSizePercentage;
 	}
 });
 
-let cachedPrimaryPanelSizePixels = 0;
+let cachedSizePixels = 0;
 
 onMounted(() => {
-	cachedPrimaryPanelSizePixels = primaryPanelSizePixels.value;
+	cachedSizePixels = sizePixels.value;
 });
+
+const { x: dividerX, y: dividerY } = useDraggable(dividerEl, { containerElement: panelEl });
 
 watch([dividerX, dividerY], ([newX, newY]) => {
 	if (props.disabled) return;
@@ -122,12 +153,22 @@ watch([dividerX, dividerY], ([newX, newY]) => {
 		newPositionInPixels = componentSize.value - newPositionInPixels;
 	}
 
-	primaryPanelSizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
+	// if (props.collapsible && props.minSize !== undefined && props.collapseThreshold !== undefined) {
+	// 	const threshold = props.minSize - (props.collapseThreshold ?? 0);
+
+	// 	console.log(threshold, newPositionInPixels);
+
+	// 	if (newPositionInPixels < threshold) {
+	// 		collapsed.value = true;
+	// 	}
+	// }
+
+	sizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
 });
 
-watch(primaryPanelSizePixels, (newPixels, oldPixels) => {
+watch(sizePixels, (newPixels, oldPixels) => {
 	if (newPixels === oldPixels) return;
-	cachedPrimaryPanelSizePixels = newPixels;
+	cachedSizePixels = newPixels;
 });
 
 useResizeObserver(panelEl, (entries) => {
@@ -136,7 +177,7 @@ useResizeObserver(panelEl, (entries) => {
 	const size = props.orientation === 'horizontal' ? width : height;
 
 	if (props.primary) {
-		primaryPanelSizePercentage.value = pixelsToPercentage(size, cachedPrimaryPanelSizePixels);
+		sizePercentage.value = pixelsToPercentage(size, cachedSizePixels);
 	}
 });
 
@@ -144,7 +185,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 	if (props.disabled) return;
 
 	if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'].includes(event.key)) {
-		let newPosition = primaryPanelSizePercentage.value;
+		let newPosition = sizePercentage.value;
 
 		const increment = (event.shiftKey ? 10 : 1) * (props.primary === 'end' ? -1 : 1);
 
@@ -170,12 +211,12 @@ const handleKeydown = (event: KeyboardEvent) => {
 			newPosition = props.primary === 'end' ? 0 : 100;
 		}
 
-		primaryPanelSizePercentage.value = clamp(newPosition, 0, 100);
+		sizePercentage.value = clamp(newPosition, 0, 100);
 	}
 };
 
 const gridTemplate = computed(() => {
-	const primary = `clamp(0%, clamp(${props.minSize}, ${primaryPanelSizePercentage.value}%, ${props.maxSize}), calc(100% - ${dividerSize.value}px))`;
+	const primary = `clamp(0%, clamp(${minSizePercentage.value}%, ${sizePercentage.value}%, ${maxSizePercentage.value}%), calc(100% - ${dividerSize.value}px))`;
 	const secondary = 'auto';
 
 	if (!props.primary || props.primary === 'start') {
@@ -214,7 +255,7 @@ defineExpose({ collapse, expand, toggle });
 			:class="[{ disabled }, orientation]"
 			:tabindex="disabled ? undefined : 0"
 			role="separator"
-			:aria-valuenow="primaryPanelSizePercentage"
+			:aria-valuenow="sizePercentage"
 			aria-valuemin="0"
 			aria-valuemax="100"
 			aria-label="Resize"
