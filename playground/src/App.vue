@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { SplitPanel } from '../../src';
+
+const collapsed = ref(false);
 </script>
 
 <template>
-	<SplitPanel class="split" min="150px" :size="200" size-unit="px" max="500px" primary="end">
+	<SplitPanel class="split" collapsible :collapsed :min-size="30" :collapse-threshold="80">
 		<template #start>
 			<div class="panel">
 				<p>Panel A</p>
@@ -20,6 +23,10 @@ import { SplitPanel } from '../../src';
 			</div>
 		</template>
 	</SplitPanel>
+
+	<button @click="collapsed = !collapsed">
+		Collapse
+	</button>
 </template>
 
 <style scoped>
@@ -37,5 +44,7 @@ import { SplitPanel } from '../../src';
 
 .resize-handle {
 	width: 5px;
+	height: 100%;
+	background-color: black;
 }
 </style>
