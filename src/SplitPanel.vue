@@ -214,6 +214,10 @@ const handleKeydown = (event: KeyboardEvent) => {
 			newPosition = props.primary === 'end' ? 0 : 100;
 		}
 
+		if (event.key === 'Enter' && props.collapsible) {
+			collapsed.value = !collapsed.value;
+		}
+
 		sizePercentage.value = clamp(newPosition, 0, 100);
 	}
 };
