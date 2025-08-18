@@ -126,10 +126,21 @@ const gridTemplate = computed(() => {
 	const secondary = 'auto';
 
 	if (props.primary === 'start') {
-		return `${primary} ${dividerWidth.value}px ${secondary}`;
+		if (props.direction === 'ltr') {
+			return `${primary} ${dividerWidth.value}px ${secondary}`;
+		}
+		else {
+			return `${secondary} ${dividerWidth.value}px ${primary}`;
+		}
 	}
-
-	return `${secondary} ${dividerWidth.value}px ${primary}`;
+	else {
+		if (props.direction === 'ltr') {
+			return `${secondary} ${dividerWidth.value}px ${primary}`;
+		}
+		else {
+			return `${primary} ${dividerWidth.value}px ${secondary}`;
+		}
+	}
 });
 </script>
 
@@ -138,7 +149,7 @@ const gridTemplate = computed(() => {
 		<div class="start">
 			<slot name="start" />
 		</div>
-		<div ref="divider" class="divider" :disabled="disabled">
+		<div ref="divider" class="divider" :class="{ disabled }">
 			<slot name="divider" />
 		</div>
 		<div class="end">
@@ -161,7 +172,7 @@ const gridTemplate = computed(() => {
 	width: max-content;
 	position: relative;
 
-	&:not([disabled])::after {
+	&:not(.disabled)::after {
 		content: '';
 		position: absolute;
 		block-size: 100%;
