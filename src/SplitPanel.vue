@@ -51,39 +51,43 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 const panelEl = useTemplateRef('split-panel');
 const dividerEl = useTemplateRef('divider');
 
-const { width: panelsWidth } = useElementSize(panelEl);
-const { width: dividerWidth } = useElementSize(dividerEl);
-const { x: dividerX } = useDraggable(dividerEl, { containerElement: panelEl });
+const { width: componentWidth, height: componentHeight } = useElementSize(panelEl);
+const componentSize = computed(() => props.orientation === 'horizontal' ? componentWidth.value : componentHeight.value);
+
+const { width: dividerWidth, height: dividerHeight } = useElementSize(dividerEl);
+const dividerSize = computed(() => props.orientation === 'horizontal' ? dividerWidth.value : dividerHeight.value);
+
+const { x: dividerX, y: dividerY } = useDraggable(dividerEl, { containerElement: panelEl });
 
 /** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
-const size = defineModel<number>('size', { default: 50 });
+const primaryPanelSize = defineModel<number>('size', { default: 50 });
 
 const sizePercentage = computed({
 	get() {
-		if (props.sizeUnit === '%') return size.value;
-		return pixelsToPercentage(panelsWidth.value, size.value);
+		if (props.sizeUnit === '%') return primaryPanelSize.value;
+		return pixelsToPercentage(componentSize.value, primaryPanelSize.value);
 	},
 	set(newValue: number) {
 		if (props.sizeUnit === '%') {
-			size.value = newValue;
+			primaryPanelSize.value = newValue;
 		}
 		else {
-			size.value = percentageToPixels(panelsWidth.value, newValue);
+			primaryPanelSize.value = percentageToPixels(componentSize.value, newValue);
 		}
 	},
 });
 
 const sizePixels = computed({
 	get() {
-		if (props.sizeUnit === 'px') return size.value;
-		return percentageToPixels(panelsWidth.value, size.value);
+		if (props.sizeUnit === 'px') return primaryPanelSize.value;
+		return percentageToPixels(componentSize.value, primaryPanelSize.value);
 	},
 	set(newValue: number) {
 		if (props.sizeUnit === 'px') {
-			size.value = newValue;
+			primaryPanelSize.value = newValue;
 		}
 		else {
-			size.value = pixelsToPercentage(panelsWidth.value, newValue);
+			primaryPanelSize.value = pixelsToPercentage(componentSize.value, newValue);
 		}
 	},
 });
@@ -94,16 +98,16 @@ onMounted(() => {
 	cachedSizePx = sizePixels.value;
 });
 
-watch(dividerX, (newX) => {
+watch([dividerX, dividerY], ([newX, newY]) => {
 	if (props.disabled) return;
 
-	let newPositionInPixels = newX;
+	let newPositionInPixels = props.orientation === 'horizontal' ? newX : newY;
 
 	if (props.primary === 'end') {
-		newPositionInPixels = panelsWidth.value - newPositionInPixels;
+		newPositionInPixels = componentSize.value - newPositionInPixels;
 	}
 
-	sizePercentage.value = clamp(pixelsToPercentage(panelsWidth.value, newPositionInPixels), 0, 100);
+	sizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
 });
 
 watch(sizePixels, (newPixels, oldPixels) => {
@@ -113,43 +117,43 @@ watch(sizePixels, (newPixels, oldPixels) => {
 
 useResizeObserver(panelEl, (entries) => {
 	const entry = entries[0];
-	const { width } = entry.contentRect;
+	const { width, height } = entry.contentRect;
+	const size = props.orientation === 'horizontal' ? width : height;
 
 	if (props.primary) {
-		sizePercentage.value = pixelsToPercentage(width, cachedSizePx);
+		sizePercentage.value = pixelsToPercentage(size, cachedSizePx);
 	}
 });
 
-// TODO LTR support
 const gridTemplate = computed(() => {
-	const primary = `clamp(0%, clamp(${props.min}, ${sizePercentage.value}%, ${props.max}), calc(100% - ${dividerWidth.value}px))`;
+	const primary = `clamp(0%, clamp(${props.min}, ${sizePercentage.value}%, ${props.max}), calc(100% - ${dividerSize.value}px))`;
 	const secondary = 'auto';
 
 	if (props.primary === 'start') {
-		if (props.direction === 'ltr') {
-			return `${primary} ${dividerWidth.value}px ${secondary}`;
+		if (props.direction === 'ltr' || props.orientation === 'vertical') {
+			return `${primary} ${dividerSize.value}px ${secondary}`;
 		}
 		else {
-			return `${secondary} ${dividerWidth.value}px ${primary}`;
+			return `${secondary} ${dividerSize.value}px ${primary}`;
 		}
 	}
 	else {
-		if (props.direction === 'ltr') {
-			return `${secondary} ${dividerWidth.value}px ${primary}`;
+		if (props.direction === 'ltr' || props.orientation === 'vertical') {
+			return `${secondary} ${dividerSize.value}px ${primary}`;
 		}
 		else {
-			return `${primary} ${dividerWidth.value}px ${secondary}`;
+			return `${primary} ${dividerSize.value}px ${secondary}`;
 		}
 	}
 });
 </script>
 
 <template>
-	<div ref="split-panel" class="split-panel">
+	<div ref="split-panel" class="split-panel" :class="orientation">
 		<div class="start">
 			<slot name="start" />
 		</div>
-		<div ref="divider" class="divider" :class="{ disabled }">
+		<div ref="divider" class="divider" :class="[{ disabled }, orientation]">
 			<slot name="divider" />
 		</div>
 		<div class="end">
@@ -161,7 +165,14 @@ const gridTemplate = computed(() => {
 <style scoped>
 .split-panel {
 	display: grid;
-	grid-template-columns: v-bind(gridTemplate);
+
+	&.horizontal {
+		grid-template-columns: v-bind(gridTemplate);
+	}
+
+	&.vertical {
+		grid-template-rows: v-bind(gridTemplate);
+	}
 }
 
 .start, .end {
@@ -169,16 +180,26 @@ const gridTemplate = computed(() => {
 }
 
 .divider {
-	width: max-content;
 	position: relative;
 
 	&:not(.disabled)::after {
 		content: '';
 		position: absolute;
-		block-size: 100%;
-		inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerWidth) * 1px / 2);
-		inline-size: v-bind(dividerHitArea);
 		cursor: ew-resize;
+	}
+
+	&.horizontal:not(.disabled)::after {
+		block-size: 100%;
+		inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+		inset-block-start: 0;
+		inline-size: v-bind(dividerHitArea);
+	}
+
+	&.vertical:not(.disabled)::after {
+		inline-size: 100%;
+		inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+		inset-inline-start: 0;
+		block-size: v-bind(dividerHitArea);
 	}
 }
 </style>
