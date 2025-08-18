@@ -15,6 +15,7 @@ export interface SplitPanelProps {
 	/** The invisible region around the divider where dragging can occur. This is usually wider than the divider to facilitate easier dragging. */
 	dividerHitArea?: string;
 
+	/** Whether the size v-model should be in relative percentages or absolute pixels */
 	sizeUnit?: '%' | 'px';
 }
 
@@ -106,10 +107,13 @@ useResizeObserver(panelEl, (entries) => {
 // TODO LTR support
 const gridTemplate = computed(() => {
 	const primary = `clamp(0%, clamp(${props.min}, ${sizePercentage.value}%, ${props.max}), calc(100% - ${dividerWidth.value}px))`;
-
 	const secondary = 'auto';
 
-	return `${primary} ${dividerWidth.value}px ${secondary}`;
+	if (props.primary === 'start') {
+		return `${primary} ${dividerWidth.value}px ${secondary}`;
+	}
+
+	return `${secondary} ${dividerWidth.value}px ${primary}`;
 });
 </script>
 

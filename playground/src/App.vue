@@ -3,7 +3,7 @@ import { SplitPanel } from '../../src';
 </script>
 
 <template>
-	<SplitPanel class="split" min="150px" :size="200" size-unit="px" max="500px" primary="start">
+	<SplitPanel class="split" min="150px" :size="200" size-unit="px" max="500px" primary="end">
 		<template #start>
 			<div class="panel">
 				<p>Panel A</p>
@@ -28,13 +28,14 @@ import { SplitPanel } from '../../src';
 }
 
 .panel {
-	background-color: gray;
+	background-color: lightblue;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	height: 500px;
 }
 
 .resize-handle {
-	width: 2px;
+	width: 5px;
 }
 </style>
