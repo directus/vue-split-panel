@@ -121,6 +121,40 @@ useResizeObserver(panelEl, (entries) => {
 	}
 });
 
+const handleKeydown = (event: KeyboardEvent) => {
+	if (props.disabled) return;
+
+	if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'].includes(event.key)) {
+		let newPosition = primaryPanelSizePercentage.value;
+
+		const increment = (event.shiftKey ? 10 : 1) * (props.primary === 'end' ? -1 : 1);
+
+		if (
+			(event.key === 'ArrowLeft' && props.orientation === 'horizontal')
+			|| (event.key === 'ArrowUp' && props.orientation === 'vertical')
+		) {
+			newPosition -= increment;
+		}
+
+		if (
+			(event.key === 'ArrowRight' && props.orientation === 'horizontal')
+			|| (event.key === 'ArrowDown' && props.orientation === 'vertical')
+		) {
+			newPosition += increment;
+		}
+
+		if (event.key === 'Home') {
+			newPosition = props.primary === 'end' ? 100 : 0;
+		}
+
+		if (event.key === 'End') {
+			newPosition = props.primary === 'end' ? 0 : 100;
+		}
+
+		primaryPanelSizePercentage.value = clamp(newPosition, 0, 100);
+	}
+};
+
 const gridTemplate = computed(() => {
 	const primary = `clamp(0%, clamp(${props.min}, ${primaryPanelSizePercentage.value}%, ${props.max}), calc(100% - ${dividerSize.value}px))`;
 	const secondary = 'auto';
@@ -154,6 +188,12 @@ const gridTemplate = computed(() => {
 			class="divider"
 			:class="[{ disabled }, orientation]"
 			:tabindex="disabled ? undefined : 0"
+			role="separator"
+			:aria-valuenow="primaryPanelSizePercentage"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			aria-label="Resize"
+			@keydown.prevent="handleKeydown"
 		>
 			<slot name="divider">
 				<div />
