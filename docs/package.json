@@ -1,0 +1,13 @@
+{
+	"name": "docs",
+	"private": true,
+	"scripts": {
+		"dev": "nuxt dev --extends docus",
+		"build": "nuxt build --extends docus"
+	},
+	"dependencies": {
+		"better-sqlite3": "^12.2.0",
+		"docus": "latest",
+		"nuxt": "^4.0.0"
+	}
+}
