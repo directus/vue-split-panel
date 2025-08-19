@@ -1,5 +1,5 @@
 {
-	"name": "@rijk/vue-split-panel",
+	"name": "@directus/vue-split-panel",
 	"type": "module",
 	"version": "0.0.1",
 	"packageManager": "pnpm@10.14.0",

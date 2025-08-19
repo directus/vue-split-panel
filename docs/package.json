@@ -6,8 +6,11 @@
 		"build": "nuxt build --extends docus"
 	},
 	"dependencies": {
+		"@directus/vue-split-panel": "workspace:*",
+		"@nuxt/ui-pro": "3.3.2",
 		"better-sqlite3": "^12.2.0",
 		"docus": "latest",
-		"nuxt": "^4.0.0"
+		"nuxt": "^4.0.0",
+		"tailwindcss": "4.1.12"
 	}
 }
