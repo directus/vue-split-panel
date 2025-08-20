@@ -23,7 +23,8 @@
 		".": {
 			"import": "./dist/index.js"
 		},
-		"./package.json": "./package.json"
+		"./package.json": "./package.json",
+		"./index.css": "./dist/index.css"
 	},
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -43,7 +44,7 @@
 		"lint:fix": "pnpm run lint --fix"
 	},
 	"peerDependencies": {
-		"vue": ">= 3.2.0"
+		"vue": "^3.0.0"
 	},
 	"dependencies": {
 		"@vueuse/core": "13.6.0",

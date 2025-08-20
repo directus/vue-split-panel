@@ -67,15 +67,3 @@ A split panel component based on Reka-UI and Web Awesome Split Panel
     ::::
   :::
 ::
-
-::u-page-section
-  ::client-only
-    ::split-panel
-    #start
-      Panel A
-
-    #end
-      Panel B
-    ::
-  ::
-::
