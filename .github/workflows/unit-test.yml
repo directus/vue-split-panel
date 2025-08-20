@@ -26,13 +26,13 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build
+        run: pnpm -r run build
 
       - name: Lint
-        run: pnpm run lint
+        run: pnpm -r run lint
 
       - name: Typecheck
-        run: pnpm run typecheck
+        run: pnpm -r run typecheck
 
       - name: Test
-        run: pnpm run test
+        run: pnpm -r run test
