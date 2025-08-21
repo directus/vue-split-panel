@@ -65,5 +65,13 @@ A split panel component based on Reka-UI and Web Awesome Split Panel
       description: Create rich layouts by nesting split panel components
     ---
     ::::
+
+    ::::u-page-feature
+    ---
+      title: Transitions
+      icon: lucide-send-to-back
+      description: Support for transitions when collapsing/expanding the primary panel
+    ---
+    ::::
   :::
 ::
