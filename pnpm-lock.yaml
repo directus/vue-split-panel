@@ -35,6 +35,9 @@ importers:
       tailwindcss:
         specifier: 4.1.12
         version: 4.1.12
+      vue:
+        specifier: 3.5.18
+        version: 3.5.18(typescript@5.9.2)
     devDependencies:
       '@nuxtjs/mdc':
         specifier: 0.17.2

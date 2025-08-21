@@ -55,7 +55,7 @@ import { SplitPanel } from '../../src';
 	background: tomato;
 }
 
-#c {
+#b {
 	background: skyblue;
 }
 </style>
