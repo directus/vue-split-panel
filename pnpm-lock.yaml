@@ -29,6 +29,13 @@ importers:
       tailwindcss:
         specifier: 4.1.12
         version: 4.1.12
+    devDependencies:
+      '@nuxtjs/mdc':
+        specifier: 0.17.2
+        version: 0.17.2(magicast@0.3.5)
+      unist-util-visit:
+        specifier: 5.0.0
+        version: 5.0.0
 
   packages/vue-split-panel:
     dependencies:
