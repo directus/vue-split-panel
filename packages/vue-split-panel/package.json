@@ -52,7 +52,6 @@
 		"test": "3.3.0"
 	},
 	"devDependencies": {
-		"@directus/eslint-config": "https://pkg.pr.new/directus/eslint-config/@directus/eslint-config@a8261b0",
 		"@types/node": "24.3.0",
 		"@vitejs/plugin-vue": "6.0.1",
 		"@vitest/coverage-v8": "3.2.4",
