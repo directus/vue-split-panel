@@ -44,7 +44,6 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	disabled: false,
 	snapThreshold: 12,
 	minSize: 0,
-	maxSize: 100,
 	dividerHitArea: '12px',
 	sizeUnit: '%',
 	direction: 'ltr',
@@ -223,10 +222,16 @@ const handleKeydown = (event: KeyboardEvent) => {
 };
 
 const gridTemplate = computed(() => {
-	let primary = `clamp(0%, clamp(${minSizePercentage.value}%, ${sizePercentage.value}%, ${maxSizePercentage.value}%), calc(100% - ${dividerSize.value}px))`;
+	let primary: string;
 
 	if (collapsed.value) {
 		primary = '0';
+	}
+	else if (minSizePercentage.value !== undefined && maxSizePercentage.value !== undefined) {
+		primary = `clamp(0%, clamp(${minSizePercentage.value}%, ${sizePercentage.value}%, ${maxSizePercentage.value}%), calc(100% - ${dividerSize.value}px))`;
+	}
+	else {
+		primary = `clamp(0%, ${sizePercentage.value}%, calc(100% - ${dividerSize.value}px))`;
 	}
 
 	const secondary = 'auto';
@@ -304,39 +309,41 @@ defineExpose({ collapse, expand, toggle });
 	overflow: hidden;
 }
 
-.divider:not(.disabled) {
+.divider {
 	position: relative;
 
-	& :deep(> :first-child) {
-		&::after {
-			content: '';
-			position: absolute;
+	&:not(.disabled) {
+		& :deep(> :first-child) {
+			&::after {
+				content: '';
+				position: absolute;
+			}
 		}
-	}
 
-	&.horizontal {
-		block-size: 100%;
-		inline-size: 0;
-
-		& :deep(> :first-child)::after {
+		&.horizontal {
 			block-size: 100%;
-			inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
-			inset-block-start: 0;
-			inline-size: v-bind(dividerHitArea);
-			cursor: ew-resize;
+			inline-size: 0;
+
+			& :deep(> :first-child)::after {
+				block-size: 100%;
+				inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+				inset-block-start: 0;
+				inline-size: v-bind(dividerHitArea);
+				cursor: ew-resize;
+			}
 		}
-	}
 
-	&.vertical {
-		inline-size: 100%;
-		block-size: 0;
-
-		& :deep(> :first-child)::after {
+		&.vertical {
 			inline-size: 100%;
-			inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
-			inset-inline-start: 0;
-			block-size: v-bind(dividerHitArea);
-			cursor: ns-resize;
+			block-size: 0;
+
+			& :deep(> :first-child)::after {
+				inline-size: 100%;
+				inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+				inset-inline-start: 0;
+				block-size: v-bind(dividerHitArea);
+				cursor: ns-resize;
+			}
 		}
 	}
 }
