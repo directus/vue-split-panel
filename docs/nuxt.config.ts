@@ -6,4 +6,7 @@ export default defineNuxtConfig({
 	robots: {
 		robotsTxt: false
 	},
+	llms: {
+		domain: 'https://directus.github.io/vue-split-panel',
+	},
 });
