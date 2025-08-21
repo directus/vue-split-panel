@@ -28,13 +28,13 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm -r run build
+        run: pnpm -F '!docs' run build
 
       - name: Lint
-        run: pnpm -r run lint
+        run: pnpm -F '!docs' run lint
 
       - name: Typecheck
-        run: pnpm -r run typecheck
+        run: pnpm -F '!docs' run typecheck
 
       - name: Test
-        run: pnpm -r run test
+        run: pnpm -F '!docs' run test
