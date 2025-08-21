@@ -39,10 +39,8 @@ import { percentageToPixels } from './utils/percentage-to-pixels';
 import { pixelsToPercentage } from './utils/pixels-to-percentage';
 
 const props = withDefaults(defineProps<SplitPanelProps>(), {
-	position: 50,
 	orientation: 'horizontal',
 	disabled: false,
-	snapThreshold: 12,
 	minSize: 0,
 	dividerHitArea: '12px',
 	sizeUnit: '%',
