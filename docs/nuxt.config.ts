@@ -3,6 +3,7 @@ export default defineNuxtConfig({
 	modules: [],
 	css: ['@directus/vue-split-panel/index.css'],
 	compatibilityDate: '2025-07-18',
+	components: [{ path: '~/components', global: true }],
 	robots: {
 		robotsTxt: false
 	},
