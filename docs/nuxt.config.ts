@@ -3,7 +3,7 @@ export default defineNuxtConfig({
 	modules: [],
 	css: ['@directus/vue-split-panel/index.css'],
 	compatibilityDate: '2025-07-18',
-	ui: {
-		safelist: ['red', 'green']
-	}
+	robots: {
+		robotsTxt: false
+	},
 });
