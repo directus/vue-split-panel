@@ -29,12 +29,21 @@ export interface SplitPanelProps {
 
 	/** How far to drag beyond the minSize to collapse/expand the primary panel */
 	collapseThreshold?: number;
+
+	/** How long should the collapse/expand state transition for in CSS value */
+	transitionDuration?: string;
+
+	/** CSS transition timing function for the expand transition */
+	transitionTimingFunctionExpand?: string;
+
+	/** CSS transition timing function for the collapse transition */
+	transitionTimingFunctionCollapse?: string;
 }
 </script>
 
 <script lang="ts" setup>
 import { clamp, useDraggable, useElementSize, useResizeObserver } from '@vueuse/core';
-import { computed, onMounted, useTemplateRef, watch } from 'vue';
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { percentageToPixels } from './utils/percentage-to-pixels';
 import { pixelsToPercentage } from './utils/pixels-to-percentage';
 
@@ -46,6 +55,9 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	sizeUnit: '%',
 	direction: 'ltr',
 	collapsible: false,
+	transitionDuration: '0',
+	transitionTimingFunctionCollapse: 'cubic-bezier(0.4, 0, 0.6, 1)',
+	transitionTimingFunctionExpand: 'cubic-bezier(0, 0, 0.2, 1)',
 });
 
 const panelEl = useTemplateRef('split-panel');
@@ -116,13 +128,19 @@ let expandedSizePercentage = 0;
 /** Whether the primary column is collapsed or not */
 const collapsed = defineModel<boolean>('collapsed', { default: false });
 
+const collapseTransitionState = ref<null | 'expanding' | 'collapsing'>(null);
+
+const onTransitionEnd = () => collapseTransitionState.value = null;
+
 watch(collapsed, (newCollapsed) => {
 	if (newCollapsed === true) {
 		expandedSizePercentage = sizePercentage.value;
 		sizePercentage.value = 0;
+		collapseTransitionState.value = 'collapsing';
 	}
 	else {
 		sizePercentage.value = expandedSizePercentage;
+		collapseTransitionState.value = 'expanding';
 	}
 });
 
@@ -260,7 +278,7 @@ defineExpose({ collapse, expand, toggle });
 </script>
 
 <template>
-	<div ref="split-panel" class="split-panel" :class="[orientation, { collapsed, dragging: isDragging }]">
+	<div ref="split-panel" class="split-panel" :class="[orientation, collapseTransitionState, { collapsed, dragging: isDragging }]" @transitionend="onTransitionEnd">
 		<div class="start">
 			<slot name="start" />
 		</div>
@@ -291,15 +309,27 @@ defineExpose({ collapse, expand, toggle });
 	display: grid;
 
 	&.horizontal {
+		transition-property: grid-template-columns;
 		grid-template-columns: v-bind(gridTemplate);
 	}
 
 	&.vertical {
 		grid-template-rows: v-bind(gridTemplate);
+		transition-property: grid-template-rows;
 	}
 
 	&.dragging {
 		user-select: none;
+	}
+
+	&.collapsing {
+		transition-duration: v-bind(transitionDuration);
+		transition-timing-function: v-bind(transitionTimingFunctionCollapse);
+	}
+
+	&.expanding {
+		transition-duration: v-bind(transitionDuration);
+		transition-timing-function: v-bind(transitionTimingFunctionExpand);
 	}
 }
 
