@@ -320,7 +320,7 @@ defineExpose({ collapse, expand, toggle });
 
 		&.horizontal {
 			block-size: 100%;
-			inline-size: 0;
+			inline-size: max-content;
 
 			& :deep(> :first-child)::after {
 				block-size: 100%;
@@ -333,7 +333,7 @@ defineExpose({ collapse, expand, toggle });
 
 		&.vertical {
 			inline-size: 100%;
-			block-size: 0;
+			block-size: max-content;
 
 			& :deep(> :first-child)::after {
 				inline-size: 100%;

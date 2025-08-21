@@ -3,27 +3,21 @@ import { SplitPanel } from '../../src';
 </script>
 
 <template>
-	<SplitPanel id="panels-root">
+	<SplitPanel id="panels-root" divider-hit-area="50px" orientation="vertical">
 		<template #start>
 			<div id="a" class="panel">
 				Panel A
 			</div>
 		</template>
 
-		<template #end>
-			<SplitPanel id="panels-nested" orientation="vertical">
-				<template #start>
-					<div id="b" class="panel">
-						Panel B
-					</div>
-				</template>
+		<template #divider>
+			<div class="divider" />
+		</template>
 
-				<template #end>
-					<div id="c" class="panel">
-						Panel C
-					</div>
-				</template>
-			</SplitPanel>
+		<template #end>
+			<div id="b" class="panel">
+				Panel B
+			</div>
 		</template>
 	</SplitPanel>
 </template>
@@ -57,5 +51,11 @@ import { SplitPanel } from '../../src';
 
 #b {
 	background: skyblue;
+}
+
+.divider {
+	height: 12px;
+	background-color: black;
+	width: 100%;
 }
 </style>
