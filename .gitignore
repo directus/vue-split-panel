@@ -21,3 +21,4 @@ logs
 *.0x
 .history
 .wrangler
+.vscode
