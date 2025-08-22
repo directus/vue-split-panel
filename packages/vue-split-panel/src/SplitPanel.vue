@@ -38,12 +38,19 @@ export interface SplitPanelProps {
 
 	/** CSS transition timing function for the collapse transition */
 	transitionTimingFunctionCollapse?: string;
+
+	/** What size values the divider should snap to */
+	snapPoints?: number[];
+
+	/** How close to the snap point the size should be before the snapping occurs */
+	snapThreshold?: number;
 }
 </script>
 
 <script lang="ts" setup>
 import { clamp, useDraggable, useElementSize, useResizeObserver } from '@vueuse/core';
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { closestNumber } from './utils/closest-number';
 import { percentageToPixels } from './utils/percentage-to-pixels';
 import { pixelsToPercentage } from './utils/pixels-to-percentage';
 
@@ -58,6 +65,8 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	transitionDuration: '0',
 	transitionTimingFunctionCollapse: 'cubic-bezier(0.4, 0, 0.6, 1)',
 	transitionTimingFunctionExpand: 'cubic-bezier(0, 0, 0.2, 1)',
+	snapPoints: () => [],
+	snapThreshold: 12,
 });
 
 const panelEl = useTemplateRef('split-panel');
@@ -123,6 +132,11 @@ const maxSizePercentage = computed(() => {
 	return pixelsToPercentage(componentSize.value, props.maxSize);
 });
 
+const snapPixels = computed(() => {
+	if (props.sizeUnit === 'px') return props.snapPoints;
+	return props.snapPoints.map((snapPercentage) => percentageToPixels(componentSize.value, snapPercentage));
+});
+
 let expandedSizePercentage = 0;
 
 /** Whether the primary column is collapsed or not */
@@ -174,6 +188,19 @@ watch([dividerX, dividerY], ([newX, newY]) => {
 		else if (newPositionInPixels > expandThreshold && collapsed.value === true) {
 			collapsed.value = false;
 			hasToggledDuringCurrentDrag = true;
+		}
+	}
+
+	for (let snapPoint of snapPixels.value) {
+		if (props.direction === 'rtl' && props.orientation === 'horizontal') {
+			snapPoint = componentSize.value - snapPoint;
+		}
+
+		if (
+			newPositionInPixels >= snapPoint - props.snapThreshold
+			&& newPositionInPixels <= snapPoint + props.snapThreshold
+		) {
+			newPositionInPixels = snapPoint;
 		}
 	}
 
@@ -237,6 +264,14 @@ const handleKeydown = (event: KeyboardEvent) => {
 	}
 };
 
+const handleDblClick = () => {
+	const closest = closestNumber(snapPixels.value, sizePixels.value);
+
+	if (closest !== undefined) {
+		sizePixels.value = closest;
+	}
+};
+
 const gridTemplate = computed(() => {
 	let primary: string;
 
@@ -293,6 +328,7 @@ defineExpose({ collapse, expand, toggle });
 			aria-valuemax="100"
 			aria-label="Resize"
 			@keydown.prevent="handleKeydown"
+			@dblclick="handleDblClick"
 		>
 			<slot name="divider">
 				<div />
