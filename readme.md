@@ -20,7 +20,7 @@ import '@directus/vue-split-panel/index.css';
 			Panel A
 		</template>
 		
-		<template #start>
+		<template #end>
 			Panel B
 		</template>
 	</SplitPanel>
