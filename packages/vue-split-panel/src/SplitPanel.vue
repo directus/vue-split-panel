@@ -339,6 +339,7 @@ defineExpose({ collapse, expand, toggle });
 
 .divider {
 	position: relative;
+	z-index: +1;
 
 	&:not(.disabled) {
 		& :deep(> :first-child) {
