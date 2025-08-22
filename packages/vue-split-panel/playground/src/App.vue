@@ -3,7 +3,7 @@ import { SplitPanel } from '../../src';
 </script>
 
 <template>
-	<SplitPanel id="panels-root" divider-hit-area="50px" orientation="vertical">
+	<SplitPanel id="panels-root" :snap-points="[25, 50]">
 		<template #start>
 			<div id="a" class="panel">
 				Panel A
