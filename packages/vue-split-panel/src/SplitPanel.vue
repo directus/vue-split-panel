@@ -347,11 +347,19 @@ defineExpose({ collapse, expand, toggle });
 	&.horizontal {
 		transition-property: grid-template-columns;
 		grid-template-columns: v-bind(gridTemplate);
+
+		&.dragging {
+			cursor: ew-resize;
+		}
 	}
 
 	&.vertical {
 		grid-template-rows: v-bind(gridTemplate);
 		transition-property: grid-template-rows;
+
+		&.dragging {
+			cursor: ns-resize;
+		}
 	}
 
 	&.dragging {
