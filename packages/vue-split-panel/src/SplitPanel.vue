@@ -21,6 +21,10 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	snapThreshold: 12,
 });
 
+const emits = defineEmits<{
+	(e: 'transitionend'): void;
+}>();
+
 const panelEl = useTemplateRef('split-panel');
 const dividerEl = useTemplateRef('divider');
 
@@ -96,7 +100,10 @@ const collapsed = defineModel<boolean>('collapsed', { default: false });
 
 const collapseTransitionState = ref<null | 'expanding' | 'collapsing'>(null);
 
-const onTransitionEnd = () => collapseTransitionState.value = null;
+const onTransitionEnd = () => {
+	collapseTransitionState.value = null;
+	emits('transitionend');
+};
 
 watch(collapsed, (newCollapsed) => {
 	if (newCollapsed === true) {
