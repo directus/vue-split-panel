@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 });
 
 const emits = defineEmits<{
-	transitionend: []
+	transitionend: [];
 }>();
 
 const panelEl = useTemplateRef('split-panel');
