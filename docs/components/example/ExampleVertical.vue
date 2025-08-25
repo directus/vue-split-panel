@@ -8,11 +8,11 @@ import { SplitPanel } from '@directus/vue-split-panel';
 		class="h-128 w-full"
 	>
 		<template #start>
-			<div class="w-full h-full bg-orange-50 flex items-center justify-center">Panel A</div>
+			<div class="w-full h-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">Panel A</div>
 		</template>
 
 		<template #end>
-			<div class="w-full h-full bg-blue-50 flex items-center justify-center">Panel B</div>
+			<div class="w-full h-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">Panel B</div>
 		</template>
 	</SplitPanel>
 </template>

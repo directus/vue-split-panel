@@ -14,11 +14,11 @@ import { SplitPanel } from '@directus/vue-split-panel';
 		transition-duration="150ms"
 	>
 		<template #start>
-			<div class="h-16 bg-orange-50 flex items-center justify-center">Panel A</div>
+			<div class="h-16 bg-orange-100 dark:bg-orange-900 flex items-center justify-center">Panel A</div>
 		</template>
 
 		<template #end>
-			<div class="h-16 bg-blue-50 flex items-center justify-center">Panel B</div>
+			<div class="h-16 bg-blue-100 dark:bg-blue-900 flex items-center justify-center">Panel B</div>
 		</template>
 	</SplitPanel>
 </template>
