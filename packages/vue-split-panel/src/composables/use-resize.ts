@@ -1,3 +1,4 @@
+import type { ResizeObserverCallback } from '@vueuse/core';
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue';
 import type { Orientation, Primary } from '../types';
 import { useResizeObserver } from '@vueuse/core';
@@ -23,7 +24,7 @@ export const useResize = (sizePercentage: Ref<number>, options: UseResizeOptions
 		cachedSizePixels = newPixels;
 	});
 
-	useResizeObserver(options.panelEl, (entries) => {
+	const onResize: ResizeObserverCallback = (entries) => {
 		const entry = entries[0];
 		const { width, height } = entry.contentRect;
 		const size = toValue(options.orientation) === 'horizontal' ? width : height;
@@ -31,5 +32,9 @@ export const useResize = (sizePercentage: Ref<number>, options: UseResizeOptions
 		if (toValue(options.primary)) {
 			sizePercentage.value = pixelsToPercentage(size, cachedSizePixels);
 		}
-	});
+	};
+
+	useResizeObserver(options.panelEl, onResize);
+
+	return { onResize };
 };

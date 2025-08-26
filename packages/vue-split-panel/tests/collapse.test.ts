@@ -8,7 +8,7 @@ describe('collapse', () => {
 			props: { collapsed: true },
 		});
 
-		expect(wrapper.find('.split-panel').classes()).toContain('collapsed');
+		expect(wrapper.find('[data-testid="root"]').classes()).toContain('collapsed');
 	});
 
 	it('is not collapsed when collapsed is set to false', () => {
@@ -16,7 +16,7 @@ describe('collapse', () => {
 			props: { collapsed: false },
 		});
 
-		expect(wrapper.find('.split-panel').classes()).not.toContain('collapsed');
+		expect(wrapper.find('[data-testid="root"]').classes()).not.toContain('collapsed');
 	});
 
 	it('can be collapsed through a prop even when collapsible is false', () => {
@@ -24,7 +24,7 @@ describe('collapse', () => {
 			props: { collapsible: false, collapsed: true },
 		});
 
-		expect(wrapper.find('.split-panel').classes()).toContain('collapsed');
+		expect(wrapper.find('[data-testid="root"]').classes()).toContain('collapsed');
 	});
 
 	it('sets size to 0 when collapsed', async () => {
@@ -35,7 +35,7 @@ describe('collapse', () => {
 
 		await wrapper.setProps({ collapsed: true });
 
-		expect(wrapper.find('[role="separator"]').attributes('aria-valuenow')).toBe('0');
+		expect(wrapper.find('[data-testid="divider"]').attributes('aria-valuenow')).toBe('0');
 	});
 
 	it('preserves size when expanding back from collapsed state', async () => {
@@ -45,10 +45,10 @@ describe('collapse', () => {
 
 		// Collapse
 		await wrapper.setProps({ collapsed: true });
-		expect(wrapper.find('[role="separator"]').attributes('aria-valuenow')).toBe('0');
+		expect(wrapper.find('[data-testid="divider"]').attributes('aria-valuenow')).toBe('0');
 
 		// Expand back
 		await wrapper.setProps({ collapsed: false });
-		expect(wrapper.find('[role="separator"]').attributes('aria-valuenow')).toBe('75');
+		expect(wrapper.find('[data-testid="divider"]').attributes('aria-valuenow')).toBe('75');
 	});
 });

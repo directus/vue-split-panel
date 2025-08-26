@@ -126,8 +126,14 @@ defineExpose({ collapse, expand, toggle });
 </script>
 
 <template>
-	<div ref="split-panel" class="split-panel" :class="[orientation, collapseTransitionState, { collapsed, dragging: isDragging }]" @transitionend="onTransitionEnd">
-		<div class="start">
+	<div
+		ref="split-panel"
+		class="split-panel"
+		:class="[orientation, collapseTransitionState, { collapsed, dragging: isDragging }]"
+		data-testid="root"
+		@transitionend="onTransitionEnd"
+	>
+		<div class="start" data-testid="start">
 			<slot name="start" />
 		</div>
 		<div
@@ -140,6 +146,7 @@ defineExpose({ collapse, expand, toggle });
 			aria-valuemin="0"
 			aria-valuemax="100"
 			aria-label="Resize"
+			data-testid="divider"
 			@keydown="handleKeydown"
 			@dblclick="handleDblClick"
 		>
@@ -147,7 +154,7 @@ defineExpose({ collapse, expand, toggle });
 				<div />
 			</slot>
 		</div>
-		<div class="end">
+		<div class="end" data-testid="end">
 			<slot name="end" />
 		</div>
 	</div>
