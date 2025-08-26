@@ -1,33 +1,30 @@
+import type { Ref } from 'vue';
 import type { UsePointerOptions } from './use-pointer';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { computed, ref } from 'vue';
 import { usePointer } from './use-pointer';
 
 describe('usePointer', () => {
-	let collapsed: any;
-	let sizePercentage: any;
-	let sizePixels: any;
+	let collapsed: Ref<boolean>;
+	let sizePercentage: Ref<number>;
+	let sizePixels: Ref<number>;
 	let options: UsePointerOptions;
-	let dividerEl: any;
-	let panelEl: any;
+	let dividerEl: Ref<HTMLElement | null>;
+	let panelEl: Ref<HTMLElement | null>;
 
 	beforeEach(() => {
 		collapsed = ref(false);
 		sizePercentage = ref(50);
 		sizePixels = ref(200);
 
-		// Create mock DOM elements
-		dividerEl = ref({
-			getBoundingClientRect: () => ({ left: 0, top: 0, width: 10, height: 10 }),
-			style: {},
-			addEventListener: () => {},
-			removeEventListener: () => {},
-		});
+		// Create mock DOM elements using real HTMLElements for better type safety
+		const dividerElement = document.createElement('div');
+		dividerElement.getBoundingClientRect = () => new DOMRect(0, 0, 10, 10);
+		dividerEl = ref(dividerElement);
 
-		panelEl = ref({
-			getBoundingClientRect: () => ({ left: 0, top: 0, width: 400, height: 400 }),
-			style: {},
-		});
+		const panelElement = document.createElement('div');
+		panelElement.getBoundingClientRect = () => new DOMRect(0, 0, 400, 400);
+		panelEl = ref(panelElement);
 
 		options = {
 			disabled: ref(false),
