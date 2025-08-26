@@ -10,9 +10,9 @@ describe('basic mounting and rendering', () => {
 
 	it('renders start, divider, and end slots', () => {
 		const wrapper = mount(SplitPanel);
-		expect(wrapper.find('.start').exists()).toBe(true);
-		expect(wrapper.find('.divider').exists()).toBe(true);
-		expect(wrapper.find('.end').exists()).toBe(true);
+		expect(wrapper.find('[data-testid="start"]').exists()).toBe(true);
+		expect(wrapper.find('[data-testid="divider"]').exists()).toBe(true);
+		expect(wrapper.find('[data-testid="end"]').exists()).toBe(true);
 	});
 
 	it('renders slot content correctly', () => {
