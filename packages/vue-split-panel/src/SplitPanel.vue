@@ -189,6 +189,8 @@ const handleKeydown = (event: KeyboardEvent) => {
 	if (props.disabled) return;
 
 	if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'].includes(event.key)) {
+		event.preventDefault();
+
 		let newPosition = sizePercentage.value;
 
 		const increment = (event.shiftKey ? 10 : 1) * (props.primary === 'end' ? -1 : 1);
@@ -286,7 +288,7 @@ defineExpose({ collapse, expand, toggle });
 			aria-valuemin="0"
 			aria-valuemax="100"
 			aria-label="Resize"
-			@keydown.prevent="handleKeydown"
+			@keydown="handleKeydown"
 			@dblclick="handleDblClick"
 		>
 			<slot name="divider">
