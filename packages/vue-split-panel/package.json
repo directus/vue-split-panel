@@ -15,7 +15,9 @@
 	"keywords": [
 		"vue",
 		"ui",
-		"components"
+		"components",
+		"panel",
+		"splitter"
 	],
 	"sideEffects": false,
 	"exports": {
