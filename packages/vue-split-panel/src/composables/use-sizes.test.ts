@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 import type { UseSizesOptions } from './use-sizes';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { nextTick, ref } from 'vue';
+import { ref } from 'vue';
 import { useSizes } from './use-sizes';
 
 describe('useSizes', () => {
