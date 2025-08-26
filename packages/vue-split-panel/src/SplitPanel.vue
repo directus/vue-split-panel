@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { SplitPanelProps } from './types';
-import { clamp, useDraggable, useElementSize, useResizeObserver } from '@vueuse/core';
-import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
-import { closestNumber } from './utils/closest-number';
-import { percentageToPixels } from './utils/percentage-to-pixels';
-import { pixelsToPercentage } from './utils/pixels-to-percentage';
+import { ref, useTemplateRef, watch } from 'vue';
+import { useGridTemplate } from './composables/use-grid-template';
+import { useKeyboard } from './composables/use-keyboard';
+import { usePointer } from './composables/use-pointer';
+import { useResize } from './composables/use-resize';
+import { useSizes } from './composables/use-sizes';
 
 const props = withDefaults(defineProps<SplitPanelProps>(), {
 	orientation: 'horizontal',
@@ -25,80 +26,80 @@ const emits = defineEmits<{
 	transitionend: [event: TransitionEvent];
 }>();
 
-const panelEl = useTemplateRef('split-panel');
-const dividerEl = useTemplateRef('divider');
-
-const { width: componentWidth, height: componentHeight } = useElementSize(panelEl);
-const componentSize = computed(() => props.orientation === 'horizontal' ? componentWidth.value : componentHeight.value);
-
-const { width: dividerWidth, height: dividerHeight } = useElementSize(dividerEl);
-const dividerSize = computed(() => props.orientation === 'horizontal' ? dividerWidth.value : dividerHeight.value);
-
 /** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
 const size = defineModel<number>('size', { default: 50 });
-
-const sizePercentage = computed({
-	get() {
-		if (props.sizeUnit === '%') return size.value;
-		return pixelsToPercentage(componentSize.value, size.value);
-	},
-	set(newValue: number) {
-		if (props.sizeUnit === '%') {
-			size.value = newValue;
-		}
-		else {
-			size.value = percentageToPixels(componentSize.value, newValue);
-		}
-	},
-});
-
-const sizePixels = computed({
-	get() {
-		if (props.sizeUnit === 'px') return size.value;
-		return percentageToPixels(componentSize.value, size.value);
-	},
-	set(newValue: number) {
-		if (props.sizeUnit === 'px') {
-			size.value = newValue;
-		}
-		else {
-			size.value = pixelsToPercentage(componentSize.value, newValue);
-		}
-	},
-});
-
-const minSizePercentage = computed(() => {
-	if (props.minSize === undefined) return;
-
-	if (props.sizeUnit === '%') return props.minSize;
-	return pixelsToPercentage(componentSize.value, props.minSize);
-});
-
-const minSizePixels = computed(() => {
-	if (props.minSize === undefined) return;
-
-	if (props.sizeUnit === 'px') return props.minSize;
-	return percentageToPixels(componentSize.value, props.minSize);
-});
-
-const maxSizePercentage = computed(() => {
-	if (props.maxSize === undefined) return;
-
-	if (props.sizeUnit === '%') return props.maxSize;
-	return pixelsToPercentage(componentSize.value, props.maxSize);
-});
-
-const snapPixels = computed(() => {
-	if (props.sizeUnit === 'px') return props.snapPoints;
-	return props.snapPoints.map((snapPercentage) => percentageToPixels(componentSize.value, snapPercentage));
-});
-
-let expandedSizePercentage = 0;
 
 /** Whether the primary column is collapsed or not */
 const collapsed = defineModel<boolean>('collapsed', { default: false });
 
+const panelEl = useTemplateRef('split-panel');
+const dividerEl = useTemplateRef('divider');
+
+let expandedSizePercentage = 0;
+
 const collapseTransitionState = ref<null | 'expanding' | 'collapsing'>(null);
+
+const {
+	sizePercentage,
+	sizePixels,
+	maxSizePercentage,
+	minSizePercentage,
+	minSizePixels,
+	componentSize,
+	dividerSize,
+	snapPixels,
+} = useSizes(size, {
+	disabled: () => props.disabled,
+	collapsible: () => props.collapsible,
+	primary: () => props.primary,
+	orientation: () => props.orientation,
+	sizeUnit: () => props.sizeUnit,
+	minSize: () => props.minSize,
+	maxSize: () => props.maxSize,
+	snapPoints: () => props.snapPoints,
+	panelEl,
+	dividerEl,
+});
+
+const { handleKeydown } = useKeyboard(sizePercentage, collapsed, {
+	disabled: () => props.disabled,
+	collapsible: () => props.collapsible,
+	primary: () => props.primary,
+	orientation: () => props.orientation,
+});
+
+const { isDragging, handleDblClick } = usePointer(collapsed, sizePercentage, sizePixels, {
+	collapseThreshold: () => props.collapseThreshold,
+	collapsible: () => props.collapsible,
+	direction: () => props.direction,
+	disabled: () => props.disabled,
+	orientation: () => props.orientation,
+	primary: () => props.primary,
+	snapThreshold: () => props.snapThreshold,
+	panelEl,
+	dividerEl,
+	minSizePixels,
+	componentSize,
+	snapPixels,
+});
+
+const { gridTemplate } = useGridTemplate({
+	collapsed,
+	direction: () => props.direction,
+	dividerSize,
+	maxSizePercentage,
+	minSizePercentage,
+	orientation: () => props.orientation,
+	primary: () => props.primary,
+	sizePercentage,
+});
+
+useResize(sizePercentage, {
+	sizePixels,
+	panelEl,
+	orientation: () => props.orientation,
+	primary: () => props.primary,
+});
 
 const onTransitionEnd = (event: TransitionEvent) => {
 	collapseTransitionState.value = null;
@@ -114,155 +115,6 @@ watch(collapsed, (newCollapsed) => {
 	else {
 		sizePercentage.value = expandedSizePercentage;
 		collapseTransitionState.value = 'expanding';
-	}
-});
-
-let cachedSizePixels = 0;
-
-onMounted(() => {
-	cachedSizePixels = sizePixels.value;
-});
-
-const { x: dividerX, y: dividerY, isDragging } = useDraggable(dividerEl, { containerElement: panelEl });
-
-let hasToggledDuringCurrentDrag = false;
-
-watch([dividerX, dividerY], ([newX, newY]) => {
-	if (props.disabled) return;
-
-	let newPositionInPixels = props.orientation === 'horizontal' ? newX : newY;
-
-	if (props.primary === 'end') {
-		newPositionInPixels = componentSize.value - newPositionInPixels;
-	}
-
-	if (props.collapsible && minSizePixels.value !== undefined && props.collapseThreshold !== undefined && hasToggledDuringCurrentDrag === false) {
-		const collapseThreshold = minSizePixels.value - (props.collapseThreshold ?? 0);
-		const expandThreshold = (props.collapseThreshold ?? 0);
-
-		if (newPositionInPixels < collapseThreshold && collapsed.value === false) {
-			collapsed.value = true;
-			hasToggledDuringCurrentDrag = true;
-		}
-		else if (newPositionInPixels > expandThreshold && collapsed.value === true) {
-			collapsed.value = false;
-			hasToggledDuringCurrentDrag = true;
-		}
-	}
-
-	for (let snapPoint of snapPixels.value) {
-		if (props.direction === 'rtl' && props.orientation === 'horizontal') {
-			snapPoint = componentSize.value - snapPoint;
-		}
-
-		if (
-			newPositionInPixels >= snapPoint - props.snapThreshold
-			&& newPositionInPixels <= snapPoint + props.snapThreshold
-		) {
-			newPositionInPixels = snapPoint;
-		}
-	}
-
-	sizePercentage.value = clamp(pixelsToPercentage(componentSize.value, newPositionInPixels), 0, 100);
-});
-
-watch(isDragging, (newDragging) => {
-	if (newDragging === false) hasToggledDuringCurrentDrag = false;
-});
-
-watch(sizePixels, (newPixels, oldPixels) => {
-	if (newPixels === oldPixels) return;
-	cachedSizePixels = newPixels;
-});
-
-useResizeObserver(panelEl, (entries) => {
-	const entry = entries[0];
-	const { width, height } = entry.contentRect;
-	const size = props.orientation === 'horizontal' ? width : height;
-
-	if (props.primary) {
-		sizePercentage.value = pixelsToPercentage(size, cachedSizePixels);
-	}
-});
-
-const handleKeydown = (event: KeyboardEvent) => {
-	if (props.disabled) return;
-
-	if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'].includes(event.key)) {
-		event.preventDefault();
-
-		let newPosition = sizePercentage.value;
-
-		const increment = (event.shiftKey ? 10 : 1) * (props.primary === 'end' ? -1 : 1);
-
-		if (
-			(event.key === 'ArrowLeft' && props.orientation === 'horizontal')
-			|| (event.key === 'ArrowUp' && props.orientation === 'vertical')
-		) {
-			newPosition -= increment;
-		}
-
-		if (
-			(event.key === 'ArrowRight' && props.orientation === 'horizontal')
-			|| (event.key === 'ArrowDown' && props.orientation === 'vertical')
-		) {
-			newPosition += increment;
-		}
-
-		if (event.key === 'Home') {
-			newPosition = props.primary === 'end' ? 100 : 0;
-		}
-
-		if (event.key === 'End') {
-			newPosition = props.primary === 'end' ? 0 : 100;
-		}
-
-		if (event.key === 'Enter' && props.collapsible) {
-			collapsed.value = !collapsed.value;
-		}
-
-		sizePercentage.value = clamp(newPosition, 0, 100);
-	}
-};
-
-const handleDblClick = () => {
-	const closest = closestNumber(snapPixels.value, sizePixels.value);
-
-	if (closest !== undefined) {
-		sizePixels.value = closest;
-	}
-};
-
-const gridTemplate = computed(() => {
-	let primary: string;
-
-	if (collapsed.value) {
-		primary = '0';
-	}
-	else if (minSizePercentage.value !== undefined && maxSizePercentage.value !== undefined) {
-		primary = `clamp(0%, clamp(${minSizePercentage.value}%, ${sizePercentage.value}%, ${maxSizePercentage.value}%), calc(100% - ${dividerSize.value}px))`;
-	}
-	else {
-		primary = `clamp(0%, ${sizePercentage.value}%, calc(100% - ${dividerSize.value}px))`;
-	}
-
-	const secondary = 'auto';
-
-	if (!props.primary || props.primary === 'start') {
-		if (props.direction === 'ltr' || props.orientation === 'vertical') {
-			return `${primary} ${dividerSize.value}px ${secondary}`;
-		}
-		else {
-			return `${secondary} ${dividerSize.value}px ${primary}`;
-		}
-	}
-	else {
-		if (props.direction === 'ltr' || props.orientation === 'vertical') {
-			return `${secondary} ${dividerSize.value}px ${primary}`;
-		}
-		else {
-			return `${primary} ${dividerSize.value}px ${secondary}`;
-		}
 	}
 });
 

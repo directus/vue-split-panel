@@ -1,18 +1,23 @@
+export type Orientation = 'horizontal' | 'vertical';
+export type Direction = 'ltr' | 'rtl';
+export type Primary = 'start' | 'end';
+export type SizeUnit = '%' | 'px';
+
 export interface SplitPanelProps {
 	/**
 	 * Sets the split panel's orientation
 	 * @default 'horizontal'
 	 */
-	orientation?: 'horizontal' | 'vertical';
+	orientation?: Orientation;
 
 	/**
 	 * Sets the split panel's text direction
 	 * @default 'ltr'
 	 */
-	direction?: 'ltr' | 'rtl';
+	direction?: Direction;
 
 	/** If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the panels component is resized */
-	primary?: 'start' | 'end';
+	primary?: Primary | undefined;
 
 	/**
 	 * The invisible region around the divider where dragging can occur. This is usually wider than the divider to facilitate easier dragging. CSS value
@@ -24,7 +29,7 @@ export interface SplitPanelProps {
 	 * Whether the size v-model should be in relative percentages or absolute pixels
 	 * @default '%'
 	 */
-	sizeUnit?: '%' | 'px';
+	sizeUnit?: SizeUnit;
 
 	/**
 	 * Disable the manual resizing of the panels
