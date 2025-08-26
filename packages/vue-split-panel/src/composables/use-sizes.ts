@@ -12,7 +12,7 @@ export interface UseSizesOptions {
 	primary: MaybeRefOrGetter<Primary | undefined>;
 	orientation: MaybeRefOrGetter<Orientation>;
 	sizeUnit: MaybeRefOrGetter<SizeUnit>;
-	minSize: MaybeRefOrGetter<number | undefined>;
+	minSize: MaybeRefOrGetter<number>;
 	maxSize: MaybeRefOrGetter<number | undefined>;
 	snapPoints: MaybeRefOrGetter<number[]>;
 	panelEl: MaybeComputedElementRef;
@@ -57,15 +57,11 @@ export const useSizes = (size: Ref<number>, options: UseSizesOptions) => {
 	});
 
 	const minSizePercentage = computed(() => {
-		if (toValue(options.minSize) === undefined) return;
-
 		if (toValue(options.sizeUnit) === '%') return toValue(options.minSize);
 		return pixelsToPercentage(componentSize.value, toValue(options.minSize));
 	});
 
 	const minSizePixels = computed(() => {
-		if (toValue(options.minSize) === undefined) return;
-
 		if (toValue(options.sizeUnit) === 'px') return toValue(options.minSize);
 		return percentageToPixels(componentSize.value, toValue(options.minSize));
 	});
