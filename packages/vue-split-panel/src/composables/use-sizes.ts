@@ -12,7 +12,7 @@ export interface UseSizesOptions {
 	primary: MaybeRefOrGetter<Primary | undefined>;
 	orientation: MaybeRefOrGetter<Orientation>;
 	sizeUnit: MaybeRefOrGetter<SizeUnit>;
-	minSize: MaybeRefOrGetter<number>;
+	minSize: MaybeRefOrGetter<number | undefined>;
 	maxSize: MaybeRefOrGetter<number | undefined>;
 	snapPoints: MaybeRefOrGetter<number[]>;
 	panelEl: MaybeComputedElementRef;

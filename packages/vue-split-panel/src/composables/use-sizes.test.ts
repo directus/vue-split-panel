@@ -118,7 +118,7 @@ describe('useSizes', () => {
 
 	describe('minSizePercentage', () => {
 		it('should return undefined when minSize is undefined', () => {
-			const options = { ...defaultOptions, minSize: undefined as any };
+			const options = { ...defaultOptions, minSize: undefined };
 			const { minSizePercentage } = useSizes(size, options);
 			expect(minSizePercentage.value).toBeUndefined();
 		});
@@ -137,7 +137,7 @@ describe('useSizes', () => {
 
 	describe('minSizePixels', () => {
 		it('should return undefined when minSize is undefined', () => {
-			const options = { ...defaultOptions, minSize: undefined as any };
+			const options = { ...defaultOptions, minSize: undefined };
 			const { minSizePixels } = useSizes(size, options);
 			expect(minSizePixels.value).toBeUndefined();
 		});
