@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 });
 
 const emits = defineEmits<{
-	transitionend: [];
+	transitionend: [event: TransitionEvent];
 }>();
 
 const panelEl = useTemplateRef('split-panel');
@@ -100,9 +100,9 @@ const collapsed = defineModel<boolean>('collapsed', { default: false });
 
 const collapseTransitionState = ref<null | 'expanding' | 'collapsing'>(null);
 
-const onTransitionEnd = () => {
+const onTransitionEnd = (event: TransitionEvent) => {
 	collapseTransitionState.value = null;
-	emits('transitionend');
+	emits('transitionend', event);
 };
 
 watch(collapsed, (newCollapsed) => {
