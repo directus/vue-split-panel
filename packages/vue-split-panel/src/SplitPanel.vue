@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { SplitPanelProps } from './types';
-import { ref, useTemplateRef, watch } from 'vue';
+import { useTemplateRef } from 'vue';
+import { useCollapse } from './composables/use-collapse';
 import { useGridTemplate } from './composables/use-grid-template';
 import { useKeyboard } from './composables/use-keyboard';
 import { usePointer } from './composables/use-pointer';
@@ -34,10 +35,6 @@ const collapsed = defineModel<boolean>('collapsed', { default: false });
 
 const panelEl = useTemplateRef('split-panel');
 const dividerEl = useTemplateRef('divider');
-
-let expandedSizePercentage = 0;
-
-const collapseTransitionState = ref<null | 'expanding' | 'collapsing'>(null);
 
 const {
 	sizePercentage,
@@ -103,26 +100,7 @@ useResize(sizePercentage, {
 	primary: () => props.primary,
 });
 
-const onTransitionEnd = (event: TransitionEvent) => {
-	collapseTransitionState.value = null;
-	emits('transitionend', event);
-};
-
-watch(collapsed, (newCollapsed) => {
-	if (newCollapsed === true) {
-		expandedSizePercentage = sizePercentage.value;
-		sizePercentage.value = 0;
-		collapseTransitionState.value = 'collapsing';
-	}
-	else {
-		sizePercentage.value = expandedSizePercentage;
-		collapseTransitionState.value = 'expanding';
-	}
-});
-
-const collapse = () => collapsed.value = true;
-const expand = () => collapsed.value = false;
-const toggle = (val: boolean) => collapsed.value = val;
+const { onTransitionEnd, collapseTransitionState, toggle, expand, collapse } = useCollapse(collapsed, sizePercentage, emits);
 
 defineExpose({ collapse, expand, toggle });
 </script>
