@@ -1,5 +1,6 @@
+import type { ComputedRef } from 'vue';
 import { describe, expect, it, vi } from 'vitest';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useKeyboard } from './use-keyboard';
 
 describe('useKeyboard', () => {
@@ -9,15 +10,27 @@ describe('useKeyboard', () => {
 		return event;
 	};
 
+	// Helper to build options with defaults and optional overrides
+	const createOptions = (override: Partial<{
+		disabled: boolean;
+		collapsible: boolean;
+		primary: 'start' | 'end';
+		orientation: 'horizontal' | 'vertical';
+		minSizePercentage: ComputedRef<number>;
+		maxSizePercentage: ComputedRef<number | undefined>;
+	}> = {}) => ({
+		disabled: override.disabled ?? false,
+		collapsible: override.collapsible ?? true,
+		primary: override.primary ?? 'start',
+		orientation: override.orientation ?? 'horizontal',
+		minSizePercentage: override.minSizePercentage ?? computed(() => 0),
+		maxSizePercentage: override.maxSizePercentage ?? computed(() => void 0),
+	});
+
 	it('should return handleKeydown function', () => {
 		const sizePercentage = ref(50);
 		const collapsed = ref(false);
-		const options = {
-			disabled: false,
-			collapsible: true,
-			primary: 'start' as const,
-			orientation: 'horizontal' as const,
-		};
+		const options = createOptions();
 
 		const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 
@@ -27,12 +40,7 @@ describe('useKeyboard', () => {
 	it('should do nothing when disabled', () => {
 		const sizePercentage = ref(50);
 		const collapsed = ref(false);
-		const options = {
-			disabled: true,
-			collapsible: true,
-			primary: 'start' as const,
-			orientation: 'horizontal' as const,
-		};
+		const options = createOptions({ disabled: true });
 
 		const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 		const event = createMockKeyboardEvent('ArrowRight');
@@ -47,12 +55,7 @@ describe('useKeyboard', () => {
 		it('should decrease size on ArrowLeft when primary is start', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowLeft');
@@ -66,12 +69,7 @@ describe('useKeyboard', () => {
 		it('should increase size on ArrowRight when primary is start', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowRight');
@@ -85,12 +83,7 @@ describe('useKeyboard', () => {
 		it('should increase size on ArrowLeft when primary is end', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'end' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions({ primary: 'end' });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowLeft');
@@ -105,12 +98,7 @@ describe('useKeyboard', () => {
 		it('should decrease size on ArrowUp when primary is start', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'vertical' as const,
-			};
+			const options = createOptions({ orientation: 'vertical' });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowUp');
@@ -123,12 +111,7 @@ describe('useKeyboard', () => {
 		it('should increase size on ArrowDown when primary is start', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'vertical' as const,
-			};
+			const options = createOptions({ orientation: 'vertical' });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowDown');
@@ -143,12 +126,7 @@ describe('useKeyboard', () => {
 		it('should change by 10 when shift key is pressed', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowRight', true);
@@ -163,12 +141,7 @@ describe('useKeyboard', () => {
 		it('should set to 0 on Home when primary is start', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('Home');
@@ -181,12 +154,7 @@ describe('useKeyboard', () => {
 		it('should set to 100 on End when primary is start', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('End');
@@ -199,12 +167,7 @@ describe('useKeyboard', () => {
 		it('should set to 100 on Home when primary is end', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'end' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions({ primary: 'end' });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('Home');
@@ -219,12 +182,7 @@ describe('useKeyboard', () => {
 		it('should toggle collapsed state on Enter when collapsible is true', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('Enter');
@@ -237,12 +195,7 @@ describe('useKeyboard', () => {
 		it('should not toggle collapsed state on Enter when collapsible is false', () => {
 			const sizePercentage = ref(50);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: false,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions({ collapsible: false });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('Enter');
@@ -257,12 +210,7 @@ describe('useKeyboard', () => {
 		it('should clamp size to 0 minimum', () => {
 			const sizePercentage = ref(2);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowLeft', true);
@@ -275,12 +223,7 @@ describe('useKeyboard', () => {
 		it('should clamp size to 100 maximum', () => {
 			const sizePercentage = ref(98);
 			const collapsed = ref(false);
-			const options = {
-				disabled: false,
-				collapsible: true,
-				primary: 'start' as const,
-				orientation: 'horizontal' as const,
-			};
+			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 			const event = createMockKeyboardEvent('ArrowRight', true);
@@ -294,12 +237,7 @@ describe('useKeyboard', () => {
 	it('should ignore non-handled keys', () => {
 		const sizePercentage = ref(50);
 		const collapsed = ref(false);
-		const options = {
-			disabled: false,
-			collapsible: true,
-			primary: 'start' as const,
-			orientation: 'horizontal' as const,
-		};
+		const options = createOptions();
 
 		const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
 		const event = createMockKeyboardEvent('KeyA');
@@ -308,5 +246,66 @@ describe('useKeyboard', () => {
 
 		expect(sizePercentage.value).toBe(50);
 		expect(event.preventDefault).not.toHaveBeenCalled();
+	});
+
+	describe('custom min/max size percentages', () => {
+		it('respects a custom minimum size percentage', () => {
+			const sizePercentage = ref(25);
+			const collapsed = ref(false);
+			const options = createOptions({ minSizePercentage: computed(() => 20) });
+
+			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
+
+			const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+			handleKeydown(event);
+
+			expect(sizePercentage.value).toBe(24); // still above min -> decremented
+
+			for (let i = 0; i < 10; i++) handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+
+			expect(sizePercentage.value).toBe(20); // clamped to min
+		});
+
+		it('respects a custom maximum size percentage', () => {
+			const sizePercentage = ref(75);
+			const collapsed = ref(false);
+			const options = createOptions({ maxSizePercentage: computed(() => 80) });
+
+			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
+
+			const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+			handleKeydown(event);
+
+			expect(sizePercentage.value).toBe(76);
+
+			for (let i = 0; i < 10; i++) handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+
+			expect(sizePercentage.value).toBe(80); // clamped to max
+		});
+
+		it('clamps both min and max simultaneously', () => {
+			const sizePercentage = ref(40);
+			const collapsed = ref(false);
+			const options = createOptions({ minSizePercentage: computed(() => 30), maxSizePercentage: computed(() => 60) });
+
+			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
+
+			// Grow past max with shift
+			handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight', shiftKey: true })); // +10 => 50
+			expect(sizePercentage.value).toBe(50);
+
+			handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight', shiftKey: true })); // +10 => 60
+			expect(sizePercentage.value).toBe(60);
+
+			handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight', shiftKey: true })); // attempt +10 => 70 -> clamp 60
+			expect(sizePercentage.value).toBe(60);
+
+			// Shrink past min with shift
+			handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowLeft', shiftKey: true })); // -10 => 50
+			expect(sizePercentage.value).toBe(50);
+
+			for (let i = 0; i < 10; i++) handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowLeft', shiftKey: true }));
+			expect(sizePercentage.value).toBe(30);
+		});
 	});
 });

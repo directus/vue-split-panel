@@ -17,7 +17,7 @@ export interface UsePointerOptions {
 	dividerEl: MaybeRefOrGetter<HTMLElement | null>;
 	panelEl: MaybeRefOrGetter<HTMLElement | null>;
 	componentSize: ComputedRef<number>;
-	minSizePixels: ComputedRef<number | undefined>;
+	minSizePixels: ComputedRef<number>;
 	snapPixels: ComputedRef<number[]>;
 }
 
@@ -35,7 +35,7 @@ export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>,
 			newPositionInPixels = options.componentSize.value - newPositionInPixels;
 		}
 
-		if (toValue(options.collapsible) && options.minSizePixels.value !== undefined && toValue(options.collapseThreshold) !== undefined) {
+		if (toValue(options.collapsible) && toValue(options.collapseThreshold) !== undefined) {
 			let threshold: number;
 
 			if (thresholdLocation === 'collapse') threshold = options.minSizePixels.value - (toValue(options.collapseThreshold) ?? 0);
