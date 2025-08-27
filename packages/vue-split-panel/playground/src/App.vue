@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { SplitPanel } from '../../src';
+
+const size = ref(250);
+const collapsed = ref(false);
 </script>
 
 <template>
-	<SplitPanel id="panels-root" :snap-points="[25, 50]">
+	<SplitPanel id="panels-root" v-model:size="size" v-model:collapsed="collapsed" collapsible :collapse-threshold="100" :min-size="250" :max-size="400" size-unit="px">
 		<template #start>
 			<div id="a" class="panel">
 				Panel A
