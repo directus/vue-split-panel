@@ -24,7 +24,7 @@ export interface UsePointerOptions {
 export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>, sizePixels: Ref<number>, options: UsePointerOptions) => {
 	const { x: dividerX, y: dividerY, isDragging } = useDraggable(options.dividerEl, { containerElement: options.panelEl });
 
-	let hasToggledDuringCurrentDrag = false;
+	let thresholdLocation: 'expand' | 'collapse' = collapsed.value ? 'expand' : 'collapse';
 
 	watch([dividerX, dividerY], ([newX, newY]) => {
 		if (toValue(options.disabled)) return;
@@ -35,17 +35,17 @@ export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>,
 			newPositionInPixels = options.componentSize.value - newPositionInPixels;
 		}
 
-		if (toValue(options.collapsible) && options.minSizePixels.value !== undefined && toValue(options.collapseThreshold) !== undefined && hasToggledDuringCurrentDrag === false) {
-			const collapseThreshold = options.minSizePixels.value - (toValue(options.collapseThreshold) ?? 0);
-			const expandThreshold = (toValue(options.collapseThreshold) ?? 0);
+		if (toValue(options.collapsible) && options.minSizePixels.value !== undefined && toValue(options.collapseThreshold) !== undefined) {
+			let threshold: number;
 
-			if (newPositionInPixels < collapseThreshold && collapsed.value === false) {
+			if (thresholdLocation === 'collapse') threshold = options.minSizePixels.value - (toValue(options.collapseThreshold) ?? 0);
+			else threshold = (toValue(options.collapseThreshold) ?? 0);
+
+			if (newPositionInPixels < threshold && collapsed.value === false) {
 				collapsed.value = true;
-				hasToggledDuringCurrentDrag = true;
 			}
-			else if (newPositionInPixels > expandThreshold && collapsed.value === true) {
+			else if (newPositionInPixels > threshold && collapsed.value === true) {
 				collapsed.value = false;
-				hasToggledDuringCurrentDrag = true;
 			}
 		}
 
@@ -66,7 +66,9 @@ export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>,
 	});
 
 	watch(isDragging, (newDragging) => {
-		if (newDragging === false) hasToggledDuringCurrentDrag = false;
+		if (newDragging === false) {
+			thresholdLocation = collapsed.value ? 'expand' : 'collapse';
+		}
 	});
 
 	const handleDblClick = () => {
