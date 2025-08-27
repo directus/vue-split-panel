@@ -8,7 +8,7 @@ describe('collapse', () => {
 			props: { collapsed: true },
 		});
 
-		expect(wrapper.find('[data-testid="root"]').classes()).toContain('collapsed');
+		expect(wrapper.find('[data-testid="root"]').classes()).toContain('sp-collapsed');
 	});
 
 	it('is not collapsed when collapsed is set to false', () => {
@@ -16,7 +16,7 @@ describe('collapse', () => {
 			props: { collapsed: false },
 		});
 
-		expect(wrapper.find('[data-testid="root"]').classes()).not.toContain('collapsed');
+		expect(wrapper.find('[data-testid="root"]').classes()).not.toContain('sp-collapsed');
 	});
 
 	it('can be collapsed through a prop even when collapsible is false', () => {
@@ -24,7 +24,7 @@ describe('collapse', () => {
 			props: { collapsible: false, collapsed: true },
 		});
 
-		expect(wrapper.find('[data-testid="root"]').classes()).toContain('collapsed');
+		expect(wrapper.find('[data-testid="root"]').classes()).toContain('sp-collapsed');
 	});
 
 	it('sets size to 0 when collapsed', async () => {

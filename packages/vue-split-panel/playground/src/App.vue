@@ -7,7 +7,19 @@ const collapsed = ref(false);
 </script>
 
 <template>
-	<SplitPanel id="panels-root" v-model:size="size" v-model:collapsed="collapsed" collapsible :collapse-threshold="100" :min-size="250" :max-size="400" size-unit="px">
+	<SplitPanel
+		id="panels-root"
+		v-model:size="size"
+		v-model:collapsed="collapsed"
+		collapsible
+		:collapse-threshold="100"
+		:min-size="250"
+		:max-size="400"
+		size-unit="px"
+		:ui="{
+			divider: 'my-custom-class',
+		}"
+	>
 		<template #start>
 			<div id="a" class="panel">
 				Panel A

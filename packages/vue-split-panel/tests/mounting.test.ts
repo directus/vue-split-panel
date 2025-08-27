@@ -31,7 +31,7 @@ describe('basic mounting and rendering', () => {
 
 	it('renders default divider div when no divider slot content is given', () => {
 		const wrapper = mount(SplitPanel);
-		const divider = wrapper.find('.divider');
+		const divider = wrapper.find('[data-testid="divider"]');
 
 		expect(divider.exists()).toBe(true);
 		expect(divider.find('div').exists()).toBe(true);

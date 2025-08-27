@@ -3,6 +3,12 @@ export type Direction = 'ltr' | 'rtl';
 export type Primary = 'start' | 'end';
 export type SizeUnit = '%' | 'px';
 
+export interface UiClasses {
+	start?: string;
+	divider?: string;
+	end?: string;
+}
+
 export interface SplitPanelProps {
 	/**
 	 * Sets the split panel's orientation
@@ -84,4 +90,9 @@ export interface SplitPanelProps {
 	 * @default 12
 	 */
 	snapThreshold?: number;
+
+	/**
+	 * Inject additional classes into the elements that split-panel renders
+	 */
+	ui?: UiClasses;
 }
