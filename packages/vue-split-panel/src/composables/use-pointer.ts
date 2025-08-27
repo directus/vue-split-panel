@@ -77,6 +77,10 @@ export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>,
 		if (closest !== undefined) {
 			sizePixels.value = closest;
 		}
+
+		if (collapsed.value === true) {
+			collapsed.value = false;
+		}
 	};
 
 	return { handleDblClick, isDragging };

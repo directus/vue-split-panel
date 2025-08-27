@@ -82,13 +82,13 @@ describe('usePointer', () => {
 			expect(sizePixels.value).toBe(200);
 		});
 
-		it('should remain collapsed on handle double click when collapsed', () => {
+		it('should expand on double click when collapsed', () => {
 			collapsed.value = true;
 			const { handleDblClick } = usePointer(collapsed, sizePercentage, sizePixels, options);
 
 			handleDblClick();
 
-			expect(collapsed.value).toBe(true);
+			expect(collapsed.value).toBe(false);
 		});
 
 		it('should not snap on double click when disabled', () => {
