@@ -66,6 +66,8 @@ const { handleKeydown } = useKeyboard(sizePercentage, collapsed, {
 	collapsible: () => props.collapsible,
 	primary: () => props.primary,
 	orientation: () => props.orientation,
+	minSizePercentage,
+	maxSizePercentage,
 });
 
 const { isDragging, handleDblClick } = usePointer(collapsed, sizePercentage, sizePixels, {

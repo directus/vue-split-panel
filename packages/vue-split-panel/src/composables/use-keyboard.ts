@@ -1,4 +1,4 @@
-import type { MaybeRefOrGetter, Ref } from 'vue';
+import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue';
 import type { Orientation, Primary } from '../types';
 import { clamp } from '@vueuse/core';
 import { toValue } from 'vue';
@@ -8,6 +8,8 @@ export interface UseKeyboardOptions {
 	collapsible: MaybeRefOrGetter<boolean>;
 	primary: MaybeRefOrGetter<Primary | undefined>;
 	orientation: MaybeRefOrGetter<Orientation>;
+	minSizePercentage: ComputedRef<number>;
+	maxSizePercentage: ComputedRef<number | undefined>;
 }
 
 export const useKeyboard = (sizePercentage: Ref<number>, collapsed: Ref<boolean>, options: UseKeyboardOptions) => {
@@ -47,7 +49,7 @@ export const useKeyboard = (sizePercentage: Ref<number>, collapsed: Ref<boolean>
 				collapsed.value = !collapsed.value;
 			}
 
-			sizePercentage.value = clamp(newPosition, 0, 100);
+			sizePercentage.value = clamp(newPosition, options.minSizePercentage.value, options.maxSizePercentage.value ?? 100);
 		}
 	};
 
