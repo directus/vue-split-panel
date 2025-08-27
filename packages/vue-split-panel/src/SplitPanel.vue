@@ -108,18 +108,22 @@ defineExpose({ collapse, expand, toggle });
 <template>
 	<div
 		ref="split-panel"
-		class="split-panel"
-		:class="[orientation, collapseTransitionState, { collapsed, dragging: isDragging }]"
+		class="sp-root"
+		:class="[
+			`sp-${orientation}`,
+			`sp-${collapseTransitionState}`,
+			{ 'sp-collapsed': collapsed, 'sp-dragging': isDragging },
+		]"
 		data-testid="root"
 		@transitionend="onTransitionEnd"
 	>
-		<div class="start" data-testid="start">
+		<div class="sp-start" :class="ui?.start" data-testid="start">
 			<slot name="start" />
 		</div>
 		<div
 			ref="divider"
-			class="divider"
-			:class="[{ disabled }, orientation]"
+			class="sp-divider"
+			:class="[{ 'sp-disabled': disabled }, `sp-${orientation}`, ui?.divider]"
 			:tabindex="disabled ? undefined : 0"
 			role="separator"
 			:aria-valuenow="sizePercentage"
@@ -134,54 +138,54 @@ defineExpose({ collapse, expand, toggle });
 				<div />
 			</slot>
 		</div>
-		<div class="end" data-testid="end">
+		<div class="sp-end" :class="ui?.end" data-testid="end">
 			<slot name="end" />
 		</div>
 	</div>
 </template>
 
 <style scoped>
-.split-panel {
+.sp-root {
 	display: grid;
 
-	&.horizontal {
+	&.sp-horizontal {
 		transition-property: grid-template-columns;
 		grid-template-columns: v-bind(gridTemplate);
 
-		&.dragging {
+		&.sp-dragging {
 			cursor: ew-resize;
 		}
 	}
 
-	&.vertical {
+	&.sp-vertical {
 		grid-template-rows: v-bind(gridTemplate);
 		transition-property: grid-template-rows;
 
-		&.dragging {
+		&.sp-dragging {
 			cursor: ns-resize;
 		}
 	}
 
-	&.dragging {
+	&.sp-dragging {
 		user-select: none;
 	}
 
-	&.collapsing {
+	&.sp-collapsing {
 		transition-duration: v-bind(transitionDuration);
 		transition-timing-function: v-bind(transitionTimingFunctionCollapse);
 	}
 
-	&.expanding {
+	&.sp-expanding {
 		transition-duration: v-bind(transitionDuration);
 		transition-timing-function: v-bind(transitionTimingFunctionExpand);
 	}
 }
 
-.start, .end {
+.sp-start, .sp-end {
 	overflow: hidden;
 }
 
-.divider {
+.sp-divider {
 	position: relative;
 	z-index: 1;
 
@@ -193,7 +197,7 @@ defineExpose({ collapse, expand, toggle });
 			}
 		}
 
-		&.horizontal {
+		&.sp-horizontal {
 			block-size: 100%;
 			inline-size: max-content;
 
@@ -206,7 +210,7 @@ defineExpose({ collapse, expand, toggle });
 			}
 		}
 
-		&.vertical {
+		&.sp-vertical {
 			inline-size: 100%;
 			block-size: max-content;
 
