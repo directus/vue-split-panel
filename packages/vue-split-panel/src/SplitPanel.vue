@@ -16,16 +16,12 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	sizeUnit: '%',
 	direction: 'ltr',
 	collapsible: false,
-	transitionDuration: '0',
+	transitionDuration: 0,
 	transitionTimingFunctionCollapse: 'cubic-bezier(0.4, 0, 0.6, 1)',
 	transitionTimingFunctionExpand: 'cubic-bezier(0, 0, 0.2, 1)',
 	snapPoints: () => [],
 	snapThreshold: 12,
 });
-
-const emits = defineEmits<{
-	transitionend: [event: TransitionEvent];
-}>();
 
 /** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
 const size = defineModel<number>('size', { default: 50 });
@@ -100,7 +96,17 @@ useResize(sizePercentage, {
 	primary: () => props.primary,
 });
 
-const { onTransitionEnd, collapseTransitionState, toggle, expand, collapse } = useCollapse(collapsed, sizePercentage, emits);
+const {
+	collapseTransitionState,
+	toggle,
+	expand,
+	collapse,
+	transitionDurationCss,
+} = useCollapse(
+	collapsed,
+	sizePercentage,
+	{ transitionDuration: () => props.transitionDuration },
+);
 
 defineExpose({ collapse, expand, toggle });
 </script>
@@ -111,11 +117,9 @@ defineExpose({ collapse, expand, toggle });
 		class="sp-root"
 		:class="[
 			`sp-${orientation}`,
-			`sp-${collapseTransitionState}`,
-			{ 'sp-collapsed': collapsed, 'sp-dragging': isDragging },
+			{ 'sp-collapsed': collapsed, 'sp-dragging': isDragging, [`sp-${collapseTransitionState}`]: collapseTransitionState },
 		]"
 		data-testid="root"
-		@transitionend="onTransitionEnd"
 	>
 		<div class="sp-start" :class="ui?.start" data-testid="start">
 			<slot name="start" />
@@ -148,9 +152,22 @@ defineExpose({ collapse, expand, toggle });
 .sp-root {
 	display: grid;
 
+	&.sp-collapsing {
+		transition-duration: v-bind(transitionDurationCss);
+		transition-timing-function: v-bind(transitionTimingFunctionCollapse);
+	}
+
+	&.sp-expanding {
+		transition-duration: v-bind(transitionDurationCss);
+		transition-timing-function: v-bind(transitionTimingFunctionExpand);
+	}
+
 	&.sp-horizontal {
-		transition-property: grid-template-columns;
 		grid-template-columns: v-bind(gridTemplate);
+
+		&.sp-collapsing, &.sp-expanding {
+			transition-property: grid-template-columns;
+		}
 
 		&.sp-dragging {
 			cursor: ew-resize;
@@ -159,7 +176,10 @@ defineExpose({ collapse, expand, toggle });
 
 	&.sp-vertical {
 		grid-template-rows: v-bind(gridTemplate);
-		transition-property: grid-template-rows;
+
+		&.sp-collapsing, &.sp-expanding {
+			transition-property: grid-template-rows;
+		}
 
 		&.sp-dragging {
 			cursor: ns-resize;
@@ -168,16 +188,6 @@ defineExpose({ collapse, expand, toggle });
 
 	&.sp-dragging {
 		user-select: none;
-	}
-
-	&.sp-collapsing {
-		transition-duration: v-bind(transitionDuration);
-		transition-timing-function: v-bind(transitionTimingFunctionCollapse);
-	}
-
-	&.sp-expanding {
-		transition-duration: v-bind(transitionDuration);
-		transition-timing-function: v-bind(transitionTimingFunctionExpand);
 	}
 }
 

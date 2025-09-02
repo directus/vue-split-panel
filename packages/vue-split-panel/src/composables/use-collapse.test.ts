@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { nextTick, ref } from 'vue';
 import { useCollapse } from './use-collapse';
 
@@ -6,29 +6,29 @@ describe('useCollapse', () => {
 	it('should return expected methods and properties', () => {
 		const collapsed = ref(false);
 		const sizePercentage = ref(50);
-		const emits = vi.fn();
+		const options = { transitionDuration: 300 };
 
-		const result = useCollapse(collapsed, sizePercentage, emits);
+		const result = useCollapse(collapsed, sizePercentage, options);
 
-		expect(result).toHaveProperty('onTransitionEnd');
 		expect(result).toHaveProperty('collapse');
 		expect(result).toHaveProperty('expand');
 		expect(result).toHaveProperty('toggle');
 		expect(result).toHaveProperty('collapseTransitionState');
-		expect(typeof result.onTransitionEnd).toBe('function');
+		expect(result).toHaveProperty('transitionDurationCss');
 		expect(typeof result.collapse).toBe('function');
 		expect(typeof result.expand).toBe('function');
 		expect(typeof result.toggle).toBe('function');
 		expect(result.collapseTransitionState.value).toBeNull();
+		expect(result.transitionDurationCss.value).toBe('300ms');
 	});
 
 	describe('collapse method', () => {
 		it('should set collapsed to true', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapse } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapse } = useCollapse(collapsed, sizePercentage, options);
 
 			collapse();
 
@@ -40,9 +40,9 @@ describe('useCollapse', () => {
 		it('should set collapsed to false', () => {
 			const collapsed = ref(true);
 			const sizePercentage = ref(0);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { expand } = useCollapse(collapsed, sizePercentage, emits);
+			const { expand } = useCollapse(collapsed, sizePercentage, options);
 
 			expand();
 
@@ -54,9 +54,9 @@ describe('useCollapse', () => {
 		it('should set collapsed to the provided value', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { toggle } = useCollapse(collapsed, sizePercentage, emits);
+			const { toggle } = useCollapse(collapsed, sizePercentage, options);
 
 			toggle(true);
 			expect(collapsed.value).toBe(true);
@@ -70,9 +70,9 @@ describe('useCollapse', () => {
 		it('should store size and set to 0 when collapsing', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(75);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			collapsed.value = true;
 			await nextTick();
@@ -84,9 +84,9 @@ describe('useCollapse', () => {
 		it('should restore size when expanding', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(60);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			// First collapse to store the size
 			collapsed.value = true;
@@ -104,9 +104,9 @@ describe('useCollapse', () => {
 		it('should preserve original size through multiple collapse/expand cycles', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(42);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			useCollapse(collapsed, sizePercentage, emits);
+			useCollapse(collapsed, sizePercentage, options);
 
 			// First cycle
 			collapsed.value = true;
@@ -130,9 +130,9 @@ describe('useCollapse', () => {
 		it('should handle size changes between collapse cycles', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(30);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			useCollapse(collapsed, sizePercentage, emits);
+			useCollapse(collapsed, sizePercentage, options);
 
 			// First collapse
 			collapsed.value = true;
@@ -163,9 +163,9 @@ describe('useCollapse', () => {
 		it('should start with null transition state', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			expect(collapseTransitionState.value).toBeNull();
 		});
@@ -173,9 +173,9 @@ describe('useCollapse', () => {
 		it('should set collapsing state when collapsed becomes true', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			collapsed.value = true;
 			await nextTick();
@@ -186,9 +186,9 @@ describe('useCollapse', () => {
 		it('should set expanding state when collapsed becomes false', async () => {
 			const collapsed = ref(true);
 			const sizePercentage = ref(0);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			collapsed.value = false;
 			await nextTick();
@@ -197,42 +197,29 @@ describe('useCollapse', () => {
 		});
 	});
 
-	describe('onTransitionEnd', () => {
-		it('should clear transition state and emit event', () => {
+	describe('transitionDurationCss', () => {
+		it('should return CSS transition duration', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const emits = vi.fn();
+			const options = { transitionDuration: 500 };
 
-			const { onTransitionEnd, collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { transitionDurationCss } = useCollapse(collapsed, sizePercentage, options);
 
-			// Set a transition state first
-			collapseTransitionState.value = 'collapsing';
-
-			const mockEvent = new TransitionEvent('transitionend', {
-				propertyName: 'grid-template-columns',
-				elapsedTime: 0.3,
-			});
-
-			onTransitionEnd(mockEvent);
-
-			expect(collapseTransitionState.value).toBeNull();
-			expect(emits).toHaveBeenCalledWith('transitionend', mockEvent);
+			expect(transitionDurationCss.value).toBe('500ms');
 		});
 
-		it('should work with expanding state', () => {
-			const collapsed = ref(true);
-			const sizePercentage = ref(0);
-			const emits = vi.fn();
+		it('should be reactive to transition duration changes', () => {
+			const collapsed = ref(false);
+			const sizePercentage = ref(50);
+			const transitionDuration = ref(300);
+			const options = { transitionDuration };
 
-			const { onTransitionEnd, collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { transitionDurationCss } = useCollapse(collapsed, sizePercentage, options);
 
-			collapseTransitionState.value = 'expanding';
+			expect(transitionDurationCss.value).toBe('300ms');
 
-			const mockEvent = new TransitionEvent('transitionend');
-			onTransitionEnd(mockEvent);
-
-			expect(collapseTransitionState.value).toBeNull();
-			expect(emits).toHaveBeenCalledWith('transitionend', mockEvent);
+			transitionDuration.value = 600;
+			expect(transitionDurationCss.value).toBe('600ms');
 		});
 	});
 
@@ -240,9 +227,9 @@ describe('useCollapse', () => {
 		it('should handle rapid collapse/expand operations', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(65);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapseTransitionState, onTransitionEnd } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			// Rapid collapse
 			collapsed.value = true;
@@ -255,19 +242,14 @@ describe('useCollapse', () => {
 			await nextTick();
 			expect(collapseTransitionState.value).toBe('expanding');
 			expect(sizePercentage.value).toBe(65);
-
-			// Simulate transition end
-			const mockEvent = new TransitionEvent('transitionend');
-			onTransitionEnd(mockEvent);
-			expect(collapseTransitionState.value).toBeNull();
 		});
 
 		it('should work with methods triggering state changes', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(45);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			const { collapse, expand, toggle, collapseTransitionState } = useCollapse(collapsed, sizePercentage, emits);
+			const { collapse, expand, toggle, collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
 			// Use collapse method
 			collapse();
@@ -294,9 +276,9 @@ describe('useCollapse', () => {
 		it('should work with zero initial size', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(0);
-			const emits = vi.fn();
+			const options = { transitionDuration: 300 };
 
-			useCollapse(collapsed, sizePercentage, emits);
+			useCollapse(collapsed, sizePercentage, options);
 
 			// Collapse when already at 0
 			collapsed.value = true;

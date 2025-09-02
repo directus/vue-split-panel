@@ -1,15 +1,17 @@
-import type { Ref } from 'vue';
-import { ref, watch } from 'vue';
+import type { MaybeRefOrGetter, Ref } from 'vue';
+import { refAutoReset } from '@vueuse/core';
+import { computed, toValue, watch } from 'vue';
 
-export const useCollapse = (collapsed: Ref<boolean>, sizePercentage: Ref<number>, emits: (evt: 'transitionend', event: TransitionEvent) => void) => {
+export interface UseCollapseOptions {
+	transitionDuration: MaybeRefOrGetter<number>;
+}
+
+export const useCollapse = (collapsed: Ref<boolean>, sizePercentage: Ref<number>, options: UseCollapseOptions) => {
 	let expandedSizePercentage = 0;
 
-	const collapseTransitionState = ref<null | 'expanding' | 'collapsing'>(null);
+	const collapseTransitionState = refAutoReset<null | 'expanding' | 'collapsing'>(null, toValue(options.transitionDuration));
 
-	const onTransitionEnd = (event: TransitionEvent) => {
-		collapseTransitionState.value = null;
-		emits('transitionend', event);
-	};
+	const transitionDurationCss = computed(() => `${toValue(options.transitionDuration)}ms`);
 
 	watch(collapsed, (newCollapsed) => {
 		if (newCollapsed === true) {
@@ -27,5 +29,5 @@ export const useCollapse = (collapsed: Ref<boolean>, sizePercentage: Ref<number>
 	const expand = () => collapsed.value = false;
 	const toggle = (val: boolean) => collapsed.value = val;
 
-	return { onTransitionEnd, collapse, expand, toggle, collapseTransitionState };
+	return { collapse, expand, toggle, collapseTransitionState, transitionDurationCss };
 };

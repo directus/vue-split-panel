@@ -62,10 +62,10 @@ export interface SplitPanelProps {
 	collapseThreshold?: number;
 
 	/**
-	 * How long should the collapse/expand state transition for in CSS value
+	 * How long should the collapse/expand state transition for in ms
 	 * @default '0'
 	 */
-	transitionDuration?: string;
+	transitionDuration?: number;
 
 	/**
 	 * CSS transition timing function for the expand transition
