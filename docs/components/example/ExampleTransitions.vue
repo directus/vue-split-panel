@@ -11,7 +11,7 @@ import { SplitPanel } from '@directus/vue-split-panel';
 		:size="350"
 		:max-size="500"
 		:collapse-threshold="50"
-		transition-duration="150ms"
+		:transition-duration="150"
 	>
 		<template #start>
 			<div class="h-16 bg-orange-100 dark:bg-orange-900 flex items-center justify-center">Panel A</div>

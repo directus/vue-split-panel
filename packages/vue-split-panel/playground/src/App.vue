@@ -16,6 +16,7 @@ const collapsed = ref(false);
 		:min-size="250"
 		:max-size="400"
 		size-unit="px"
+		:transition-duration="200"
 		:ui="{
 			divider: 'my-custom-class',
 		}"
