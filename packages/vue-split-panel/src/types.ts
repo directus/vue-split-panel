@@ -63,7 +63,7 @@ export interface SplitPanelProps {
 
 	/**
 	 * How long should the collapse/expand state transition for in ms
-	 * @default '0'
+	 * @default 0
 	 */
 	transitionDuration?: number;
 
