@@ -41,6 +41,18 @@ describe('useGridTemplate', () => {
 		expect(gridTemplate.value).toBe('clamp(0%, clamp(20%, 50%, 80%), calc(100% - 4px)) 4px auto');
 	});
 
+	it('respects minSizePercentage as a floor when max is not set', () => {
+		const options = createOptions({
+			minSizePercentage: computed(() => 30),
+		});
+
+		const { gridTemplate } = useGridTemplate(options);
+
+		expect(gridTemplate.value).toBe(
+			'clamp(30%, 50%, calc(100% - 4px)) 4px auto',
+		);
+	});
+
 	it('reverses order when primary is end and direction is ltr', () => {
 		const options = createOptions({ primary: 'end' });
 		const { gridTemplate } = useGridTemplate(options);
