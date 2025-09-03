@@ -45,10 +45,11 @@ describe('useGridTemplate', () => {
 		const options = createOptions({
 			minSizePercentage: computed(() => 30),
 		});
+
 		const { gridTemplate } = useGridTemplate(options);
 
 		expect(gridTemplate.value).toBe(
-			'clamp(30%, max(30%, 50%), calc(100% - 4px)) 4px auto',
+			'clamp(30%, 50%, calc(100% - 4px)) 4px auto',
 		);
 	});
 
