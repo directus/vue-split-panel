@@ -24,7 +24,7 @@ export const useGridTemplate = (options: UseGridTemplateOptions) => {
 			primary = `clamp(0%, clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, ${options.maxSizePercentage.value}%), calc(100% - ${options.dividerSize.value}px))`;
 		}
 		else if (options.minSizePercentage.value !== undefined) {
-			primary = `clamp(${options.minSizePercentage.value}%, max(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%), calc(100% - ${options.dividerSize.value}px))`;
+			primary = `clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
 		}
 		else {
 			primary = `clamp(0%, ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
