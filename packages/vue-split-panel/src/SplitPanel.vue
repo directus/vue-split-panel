@@ -42,6 +42,7 @@ const {
 	componentSize,
 	dividerSize,
 	snapPixels,
+	collapsedSizePercentage,
 } = useSizes(size, {
 	disabled: () => props.disabled,
 	collapsible: () => props.collapsible,
@@ -89,6 +90,7 @@ const { gridTemplate } = useGridTemplate({
 	orientation: () => props.orientation,
 	primary: () => props.primary,
 	sizePercentage,
+	collapsedSizePercentage,
 });
 
 useResize(sizePercentage, {

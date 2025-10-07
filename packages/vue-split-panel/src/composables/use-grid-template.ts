@@ -11,6 +11,7 @@ export interface UseGridTemplateOptions {
 	primary: MaybeRefOrGetter<Primary | undefined>;
 	direction: MaybeRefOrGetter<Direction>;
 	orientation: MaybeRefOrGetter<Orientation>;
+	collapsedSizePercentage: ComputedRef<number>;
 }
 
 export const useGridTemplate = (options: UseGridTemplateOptions) => {
@@ -18,7 +19,7 @@ export const useGridTemplate = (options: UseGridTemplateOptions) => {
 		let primary: string;
 
 		if (options.collapsed.value) {
-			primary = '0';
+			primary = `${options.collapsedSizePercentage.value}%`;
 		}
 		else if (options.minSizePercentage.value !== undefined && options.maxSizePercentage.value !== undefined) {
 			primary = `clamp(0%, clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, ${options.maxSizePercentage.value}%), calc(100% - ${options.dividerSize.value}px))`;

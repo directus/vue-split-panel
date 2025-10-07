@@ -11,6 +11,7 @@ describe('useGridTemplate', () => {
 		maxSizePercentage: computed(() => {}) as ComputedRef<number | undefined>,
 		sizePercentage: computed(() => 50),
 		dividerSize: computed(() => 4),
+		collapsedSizePercentage: computed(() => 0),
 		primary: 'start',
 		direction: 'ltr',
 		orientation: 'horizontal',
@@ -21,7 +22,28 @@ describe('useGridTemplate', () => {
 		const options = createOptions({ collapsed: ref(true) });
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('0 4px auto');
+		expect(gridTemplate.value).toBe('0% 4px auto');
+	});
+
+	it('uses custom collapsedSizePercentage when collapsed', () => {
+		const options = createOptions({
+			collapsed: ref(true),
+			collapsedSizePercentage: computed(() => 10),
+		});
+		const { gridTemplate } = useGridTemplate(options);
+
+		expect(gridTemplate.value).toBe('10% 4px auto');
+	});
+
+	it('uses custom collapsedSizePercentage with end primary', () => {
+		const options = createOptions({
+			collapsed: ref(true),
+			collapsedSizePercentage: computed(() => 15),
+			primary: 'end',
+		});
+		const { gridTemplate } = useGridTemplate(options);
+
+		expect(gridTemplate.value).toBe('auto 4px 15%');
 	});
 
 	it('returns basic clamp template when no min/max constraints', () => {

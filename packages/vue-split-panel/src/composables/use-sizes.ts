@@ -75,8 +75,6 @@ export const useSizes = (size: Ref<number>, options: UseSizesOptions) => {
 	});
 
 	const collapsedSizePercentage = computed(() => {
-		if (toValue(options.collapsedSize) === undefined) return;
-
 		if (toValue(options.sizeUnit) === '%') return toValue(options.collapsedSize);
 		return pixelsToPercentage(componentSize.value, toValue(options.collapsedSize)!);
 	});
