@@ -13,6 +13,7 @@ const collapsed = ref(false);
 		v-model:collapsed="collapsed"
 		collapsible
 		:collapse-threshold="100"
+		:collapsed-size="50"
 		:min-size="250"
 		:max-size="400"
 		size-unit="px"

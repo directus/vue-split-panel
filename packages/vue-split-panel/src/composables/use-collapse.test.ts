@@ -6,7 +6,7 @@ describe('useCollapse', () => {
 	it('should return expected methods and properties', () => {
 		const collapsed = ref(false);
 		const sizePercentage = ref(50);
-		const options = { transitionDuration: 300 };
+		const options = { transitionDuration: 300, collapsedSize: 0 };
 
 		const result = useCollapse(collapsed, sizePercentage, options);
 
@@ -26,7 +26,7 @@ describe('useCollapse', () => {
 		it('should set collapsed to true', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapse } = useCollapse(collapsed, sizePercentage, options);
 
@@ -40,7 +40,7 @@ describe('useCollapse', () => {
 		it('should set collapsed to false', () => {
 			const collapsed = ref(true);
 			const sizePercentage = ref(0);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { expand } = useCollapse(collapsed, sizePercentage, options);
 
@@ -54,7 +54,7 @@ describe('useCollapse', () => {
 		it('should set collapsed to the provided value', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { toggle } = useCollapse(collapsed, sizePercentage, options);
 
@@ -67,10 +67,10 @@ describe('useCollapse', () => {
 	});
 
 	describe('collapsed watcher behavior', () => {
-		it('should store size and set to 0 when collapsing', async () => {
+		it('should store size and set to collapsedSize when collapsing', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(75);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -84,7 +84,7 @@ describe('useCollapse', () => {
 		it('should restore size when expanding', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(60);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -104,7 +104,7 @@ describe('useCollapse', () => {
 		it('should preserve original size through multiple collapse/expand cycles', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(42);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			useCollapse(collapsed, sizePercentage, options);
 
@@ -130,7 +130,7 @@ describe('useCollapse', () => {
 		it('should handle size changes between collapse cycles', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(30);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			useCollapse(collapsed, sizePercentage, options);
 
@@ -163,7 +163,7 @@ describe('useCollapse', () => {
 		it('should start with null transition state', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -173,7 +173,7 @@ describe('useCollapse', () => {
 		it('should set collapsing state when collapsed becomes true', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -186,7 +186,7 @@ describe('useCollapse', () => {
 		it('should set expanding state when collapsed becomes false', async () => {
 			const collapsed = ref(true);
 			const sizePercentage = ref(0);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -201,7 +201,7 @@ describe('useCollapse', () => {
 		it('should return CSS transition duration', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
-			const options = { transitionDuration: 500 };
+			const options = { transitionDuration: 500, collapsedSize: 0 };
 
 			const { transitionDurationCss } = useCollapse(collapsed, sizePercentage, options);
 
@@ -212,7 +212,7 @@ describe('useCollapse', () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const transitionDuration = ref(300);
-			const options = { transitionDuration };
+			const options = { transitionDuration, collapsedSize: 0 };
 
 			const { transitionDurationCss } = useCollapse(collapsed, sizePercentage, options);
 
@@ -227,7 +227,7 @@ describe('useCollapse', () => {
 		it('should handle rapid collapse/expand operations', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(65);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -247,7 +247,7 @@ describe('useCollapse', () => {
 		it('should work with methods triggering state changes', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(45);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			const { collapse, expand, toggle, collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
 
@@ -276,7 +276,7 @@ describe('useCollapse', () => {
 		it('should work with zero initial size', async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(0);
-			const options = { transitionDuration: 300 };
+			const options = { transitionDuration: 300, collapsedSize: 0 };
 
 			useCollapse(collapsed, sizePercentage, options);
 
@@ -289,6 +289,52 @@ describe('useCollapse', () => {
 			collapsed.value = false;
 			await nextTick();
 			expect(sizePercentage.value).toBe(0);
+		});
+
+		it('should use custom collapsedSize value', async () => {
+			const collapsed = ref(false);
+			const sizePercentage = ref(60);
+			const options = { transitionDuration: 300, collapsedSize: 10 };
+
+			const { collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
+
+			// Collapse to custom size
+			collapsed.value = true;
+			await nextTick();
+			expect(sizePercentage.value).toBe(10);
+			expect(collapseTransitionState.value).toBe('collapsing');
+
+			// Expand should restore original size
+			collapsed.value = false;
+			await nextTick();
+			expect(sizePercentage.value).toBe(60);
+			expect(collapseTransitionState.value).toBe('expanding');
+		});
+
+		it('should support reactive collapsedSize value', async () => {
+			const collapsed = ref(false);
+			const sizePercentage = ref(70);
+			const collapsedSize = ref(5);
+			const options = { transitionDuration: 300, collapsedSize };
+
+			useCollapse(collapsed, sizePercentage, options);
+
+			// Collapse with initial collapsedSize
+			collapsed.value = true;
+			await nextTick();
+			expect(sizePercentage.value).toBe(5);
+
+			// Change collapsedSize while collapsed
+			collapsedSize.value = 15;
+
+			// Expand and collapse again with new collapsedSize
+			collapsed.value = false;
+			await nextTick();
+			expect(sizePercentage.value).toBe(70);
+
+			collapsed.value = true;
+			await nextTick();
+			expect(sizePercentage.value).toBe(15);
 		});
 	});
 });

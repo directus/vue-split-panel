@@ -4,6 +4,7 @@ import { computed, toValue, watch } from 'vue';
 
 export interface UseCollapseOptions {
 	transitionDuration: MaybeRefOrGetter<number>;
+	collapsedSize: MaybeRefOrGetter<number>;
 }
 
 export const useCollapse = (collapsed: Ref<boolean>, sizePercentage: Ref<number>, options: UseCollapseOptions) => {
@@ -16,7 +17,7 @@ export const useCollapse = (collapsed: Ref<boolean>, sizePercentage: Ref<number>
 	watch(collapsed, (newCollapsed) => {
 		if (newCollapsed === true) {
 			expandedSizePercentage = sizePercentage.value;
-			sizePercentage.value = 0;
+			sizePercentage.value = toValue(options.collapsedSize);
 			collapseTransitionState.value = 'collapsing';
 		}
 		else {
