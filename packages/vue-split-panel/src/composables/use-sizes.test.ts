@@ -32,6 +32,7 @@ describe('useSizes', () => {
 			snapPoints: [25, 50, 75],
 			panelEl: mockPanelEl,
 			dividerEl: mockDividerEl,
+			collapsedSize: 0,
 		};
 	});
 
