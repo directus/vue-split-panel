@@ -62,6 +62,12 @@ export interface SplitPanelProps {
 	collapseThreshold?: number;
 
 	/**
+	 * How much of the panel content is visible when the panel is collapsed
+	 * @default 0
+	 */
+	collapsedSize?: number;
+
+	/**
 	 * How long should the collapse/expand state transition for in ms
 	 * @default 0
 	 */

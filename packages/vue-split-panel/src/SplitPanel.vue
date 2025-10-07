@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	sizeUnit: '%',
 	direction: 'ltr',
 	collapsible: false,
+	collapsedSize: 0,
 	transitionDuration: 0,
 	transitionTimingFunctionCollapse: 'cubic-bezier(0.4, 0, 0.6, 1)',
 	transitionTimingFunctionExpand: 'cubic-bezier(0, 0, 0.2, 1)',
@@ -50,6 +51,7 @@ const {
 	minSize: () => props.minSize,
 	maxSize: () => props.maxSize,
 	snapPoints: () => props.snapPoints,
+	collapsedSize: () => props.collapsedSize,
 	panelEl,
 	dividerEl,
 });
@@ -105,7 +107,7 @@ const {
 } = useCollapse(
 	collapsed,
 	sizePercentage,
-	{ transitionDuration: () => props.transitionDuration },
+	{ transitionDuration: () => props.transitionDuration, collapsedSize: () => props.collapsedSize },
 );
 
 defineExpose({ collapse, expand, toggle });

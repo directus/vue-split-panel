@@ -17,6 +17,7 @@ export interface UseSizesOptions {
 	snapPoints: MaybeRefOrGetter<number[]>;
 	panelEl: MaybeComputedElementRef;
 	dividerEl: MaybeComputedElementRef;
+	collapsedSize: MaybeRefOrGetter<number>;
 }
 
 export const useSizes = (size: Ref<number>, options: UseSizesOptions) => {
@@ -73,6 +74,13 @@ export const useSizes = (size: Ref<number>, options: UseSizesOptions) => {
 		return pixelsToPercentage(componentSize.value, toValue(options.maxSize)!);
 	});
 
+	const collapsedSizePercentage = computed(() => {
+		if (toValue(options.collapsedSize) === undefined) return;
+
+		if (toValue(options.sizeUnit) === '%') return toValue(options.collapsedSize);
+		return pixelsToPercentage(componentSize.value, toValue(options.collapsedSize)!);
+	});
+
 	const snapPixels = computed(() => {
 		if (toValue(options.sizeUnit) === 'px') return toValue(options.snapPoints);
 		return toValue(options.snapPoints).map((snapPercentage) => percentageToPixels(componentSize.value, snapPercentage));
@@ -87,5 +95,6 @@ export const useSizes = (size: Ref<number>, options: UseSizesOptions) => {
 		minSizePixels,
 		maxSizePercentage,
 		snapPixels,
+		collapsedSizePercentage,
 	};
 };
