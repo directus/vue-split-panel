@@ -48,19 +48,19 @@
 		"vue": "^3.5.0"
 	},
 	"dependencies": {
-		"@vueuse/core": "13.7.0",
+		"@vueuse/core": "13.9.0",
 		"pnpm": "10.18.3",
 		"test": "3.3.0"
 	},
 	"devDependencies": {
-		"@types/node": "24.3.0",
+		"@types/node": "24.7.2",
 		"@vitejs/plugin-vue": "6.0.1",
 		"@vitest/coverage-v8": "3.2.4",
 		"@vue/test-utils": "2.4.6",
 		"bumpp": "10.3.1",
 		"eslint": "9.37.0",
 		"happy-dom": "20.0.0",
-		"tsdown": "0.14.1",
+		"tsdown": "0.15.7",
 		"typescript": "5.9.3",
 		"vite": "npm:rolldown-vite@latest",
 		"vitest": "3.2.4",
