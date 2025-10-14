@@ -65,6 +65,6 @@
 		"vite": "npm:rolldown-vite@latest",
 		"vitest": "3.2.4",
 		"vue": "3.5.19",
-		"vue-tsc": "3.0.6"
+		"vue-tsc": "3.1.1"
 	}
 }
