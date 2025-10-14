@@ -59,7 +59,7 @@
 		"@vue/test-utils": "2.4.6",
 		"bumpp": "10.2.3",
 		"eslint": "9.33.0",
-		"happy-dom": "18.0.1",
+		"happy-dom": "20.0.0",
 		"tsdown": "0.14.1",
 		"typescript": "5.9.2",
 		"vite": "npm:rolldown-vite@latest",
