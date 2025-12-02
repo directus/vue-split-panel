@@ -13,7 +13,6 @@ describe('useGridTemplate', () => {
 		dividerSize: computed(() => 4),
 		collapsedSizePercentage: computed(() => 0),
 		primary: 'start',
-		direction: 'ltr',
 		orientation: 'horizontal',
 		...overrides,
 	});
@@ -77,13 +76,6 @@ describe('useGridTemplate', () => {
 
 	it('reverses order when primary is end and direction is ltr', () => {
 		const options = createOptions({ primary: 'end' });
-		const { gridTemplate } = useGridTemplate(options);
-
-		expect(gridTemplate.value).toBe('auto 4px clamp(0%, 50%, calc(100% - 4px))');
-	});
-
-	it('reverses order when direction is rtl and primary is start', () => {
-		const options = createOptions({ direction: 'rtl' });
 		const { gridTemplate } = useGridTemplate(options);
 
 		expect(gridTemplate.value).toBe('auto 4px clamp(0%, 50%, calc(100% - 4px))');

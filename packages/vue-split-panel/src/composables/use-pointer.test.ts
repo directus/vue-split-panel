@@ -218,10 +218,11 @@ describe('usePointer', () => {
 			options.snapThreshold = ref(5);
 			usePointer(collapsed, sizePercentage, sizePixels, options);
 
-			// With RTL, snap point 100 becomes 400 - 100 = 300
-			mockDragX.value = 298; // Within threshold of transformed snap point
+			// With RTL, drag position is mirrored: newPositionInPixels = 400 - mockDragX
+			// mockDragX = 298 transforms to 102, which is within threshold of snap point 100
+			mockDragX.value = 298;
 			await nextTick();
-			expect(sizePercentage.value).toBe(75); // 300/400 * 100 = 75%
+			expect(sizePercentage.value).toBe(25); // 100/400 * 100 = 25%
 		});
 
 		it('should clamp sizePercentage between 0 and 100', async () => {
