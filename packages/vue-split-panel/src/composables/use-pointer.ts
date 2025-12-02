@@ -31,6 +31,10 @@ export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>,
 
 		let newPositionInPixels = toValue(options.orientation) === 'horizontal' ? newX : newY;
 
+		if (toValue(options.orientation) === 'horizontal' && toValue(options.direction) === 'rtl') {
+			newPositionInPixels = options.componentSize.value - newPositionInPixels;
+		}
+
 		if (toValue(options.primary) === 'end') {
 			newPositionInPixels = options.componentSize.value - newPositionInPixels;
 		}
@@ -49,11 +53,7 @@ export const usePointer = (collapsed: Ref<boolean>, sizePercentage: Ref<number>,
 			}
 		}
 
-		for (let snapPoint of options.snapPixels.value) {
-			if (toValue(options.direction) === 'rtl' && toValue(options.orientation) === 'horizontal') {
-				snapPoint = options.componentSize.value - snapPoint;
-			}
-
+		for (const snapPoint of options.snapPixels.value) {
 			if (
 				newPositionInPixels >= snapPoint - toValue(options.snapThreshold)
 				&& newPositionInPixels <= snapPoint + toValue(options.snapThreshold)
