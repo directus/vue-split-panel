@@ -4,7 +4,7 @@ import { SplitPanel } from '../src';
 
 // There's a tsdown/vitest issue causing false positives here, so we skip these tests for now
 //   => TypeError: Cannot define property split-panel, object is not extensible
-describe.skip('basic mounting and rendering', () => {
+describe.todo('basic mounting and rendering', () => {
 	it('mounts without crashing', () => {
 		const wrapper = mount(SplitPanel);
 		expect(wrapper.exists()).toBe(true);
