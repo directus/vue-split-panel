@@ -10,7 +10,7 @@
 		"url": "git+https://github.com/directus/vue-split-panel.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rijkvanzanten/vue-split-panel/issues"
+		"url": "https://github.com/directus/vue-split-panel/issues"
 	},
 	"keywords": [
 		"vue",
