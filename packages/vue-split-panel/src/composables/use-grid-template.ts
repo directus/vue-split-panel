@@ -1,5 +1,5 @@
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue';
-import type { Direction, Orientation, Primary } from '../types';
+import type { Orientation, Primary } from '../types';
 import { computed, toValue } from 'vue';
 
 export interface UseGridTemplateOptions {
@@ -9,7 +9,6 @@ export interface UseGridTemplateOptions {
 	sizePercentage: ComputedRef<number>;
 	dividerSize: ComputedRef<number>;
 	primary: MaybeRefOrGetter<Primary | undefined>;
-	direction: MaybeRefOrGetter<Direction>;
 	orientation: MaybeRefOrGetter<Orientation>;
 	collapsedSizePercentage: ComputedRef<number>;
 }
@@ -34,20 +33,10 @@ export const useGridTemplate = (options: UseGridTemplateOptions) => {
 		const secondary = 'auto';
 
 		if (!toValue(options.primary) || toValue(options.primary) === 'start') {
-			if (toValue(options.direction) === 'ltr' || toValue(options.orientation) === 'vertical') {
-				return `${primary} ${options.dividerSize.value}px ${secondary}`;
-			}
-			else {
-				return `${secondary} ${options.dividerSize.value}px ${primary}`;
-			}
+			return `${primary} ${options.dividerSize.value}px ${secondary}`;
 		}
 		else {
-			if (toValue(options.direction) === 'ltr' || toValue(options.orientation) === 'vertical') {
-				return `${secondary} ${options.dividerSize.value}px ${primary}`;
-			}
-			else {
-				return `${primary} ${options.dividerSize.value}px ${secondary}`;
-			}
+			return `${secondary} ${options.dividerSize.value}px ${primary}`;
 		}
 	});
 

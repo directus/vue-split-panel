@@ -83,7 +83,6 @@ const { isDragging, handleDblClick } = usePointer(collapsed, sizePercentage, siz
 
 const { gridTemplate } = useGridTemplate({
 	collapsed,
-	direction: () => props.direction,
 	dividerSize,
 	maxSizePercentage,
 	minSizePercentage,
