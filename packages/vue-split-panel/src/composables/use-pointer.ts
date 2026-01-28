@@ -1,8 +1,7 @@
-import type { MaybeRefOrGetter } from "@vueuse/core";
-import type { ComputedRef, Ref } from "vue";
-import type { Direction, Orientation, Primary } from "../types";
 import { clamp, useDraggable } from "@vueuse/core";
+import type { ComputedRef, MaybeRefOrGetter, Ref } from "vue";
 import { toValue, watch } from "vue";
+import type { Direction, Orientation, Primary } from "../types";
 import { closestNumber } from "../utils/closest-number";
 import { pixelsToPercentage } from "../utils/pixels-to-percentage";
 
