@@ -38,7 +38,6 @@
 		"playground": "vite dev",
 		"test": "vite test",
 		"test:coverage": "vite test --coverage",
-		"typecheck": "vue-tsc --noEmit",
 		"release": "bumpp && pnpm publish",
 		"prepublishOnly": "pnpm run build",
 		"lint": "vite lint",
@@ -54,14 +53,10 @@
 		"@vitest/coverage-v8": "4.0.18",
 		"@vue/test-utils": "2.4.6",
 		"bumpp": "10.4.0",
-		"eslint": "9.39.2",
 		"happy-dom": "20.4.0",
 		"typescript": "5.9.3",
-		"vite": "catalog:",
 		"vite-plus": "catalog:",
-		"vitest": "catalog:",
-		"vue": "3.5.27",
-		"vue-tsc": "3.2.4"
+		"vue": "3.5.27"
 	},
 	"peerDependencies": {
 		"vue": "^3.5.0"
