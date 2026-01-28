@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { SplitPanel } from '../src';
 
 // There's a tsdown/vitest issue causing false positives here, so we skip these tests for now

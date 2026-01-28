@@ -2,7 +2,7 @@ import type { UseDraggableReturn } from '@vueuse/core';
 import type { Ref } from 'vue';
 import type { UsePointerOptions } from './use-pointer';
 import { useDraggable } from '@vueuse/core';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vite-plus/test';
 import { computed, nextTick, ref } from 'vue';
 import { usePointer } from './use-pointer';
 

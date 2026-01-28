@@ -1,5 +1,5 @@
 import type { ComputedRef } from 'vue';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vite-plus/test';
 import { computed, ref } from 'vue';
 import { useKeyboard } from './use-keyboard';
 

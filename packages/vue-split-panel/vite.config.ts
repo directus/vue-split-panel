@@ -1,7 +1,10 @@
+import tsdownConfig from './tsdown.config.js';
+
 import vue from '@vitejs/plugin-vue';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-	root: './playground',
-	plugins: [vue()],
+  lib: tsdownConfig,
+  root: './playground',
+  	plugins: [vue()],
 });

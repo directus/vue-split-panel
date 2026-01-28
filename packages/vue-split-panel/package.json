@@ -33,11 +33,11 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "tsdown",
-		"dev": "tsdown --watch",
-		"playground": "vite",
-		"test": "vitest",
-		"test:coverage": "vitest --coverage",
+		"build": "vite lib",
+		"dev": "vite lib --watch",
+		"playground": "vite dev",
+		"test": "vite test",
+		"test:coverage": "vite test --coverage",
 		"typecheck": "vue-tsc --noEmit",
 		"release": "bumpp && pnpm publish",
 		"prepublishOnly": "pnpm run build",
@@ -59,11 +59,11 @@
 		"bumpp": "10.3.1",
 		"eslint": "9.37.0",
 		"happy-dom": "20.0.2",
-		"tsdown": "0.15.7",
 		"typescript": "5.9.3",
-		"vite": "npm:rolldown-vite@latest",
-		"vitest": "3.2.4",
+		"vite": "catalog:",
+		"vitest": "catalog:",
 		"vue": "3.5.19",
-		"vue-tsc": "3.1.1"
+		"vue-tsc": "3.1.1",
+		"vite-plus": "catalog:"
 	}
 }

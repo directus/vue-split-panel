@@ -1,6 +1,6 @@
 import type { ComputedRef } from 'vue';
 import type { UseGridTemplateOptions } from './use-grid-template';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { computed, ref } from 'vue';
 import { useGridTemplate } from './use-grid-template';
 
