@@ -1,37 +1,37 @@
 <script lang="ts" setup>
-import type { SplitPanelProps } from './types';
-import { useTemplateRef } from 'vue';
-import { useCollapse } from './composables/use-collapse';
-import { useGridTemplate } from './composables/use-grid-template';
-import { useKeyboard } from './composables/use-keyboard';
-import { usePointer } from './composables/use-pointer';
-import { useResize } from './composables/use-resize';
-import { useSizes } from './composables/use-sizes';
+import type { SplitPanelProps } from "./types";
+import { useTemplateRef } from "vue";
+import { useCollapse } from "./composables/use-collapse";
+import { useGridTemplate } from "./composables/use-grid-template";
+import { useKeyboard } from "./composables/use-keyboard";
+import { usePointer } from "./composables/use-pointer";
+import { useResize } from "./composables/use-resize";
+import { useSizes } from "./composables/use-sizes";
 
 const props = withDefaults(defineProps<SplitPanelProps>(), {
-	orientation: 'horizontal',
+	orientation: "horizontal",
 	disabled: false,
 	minSize: 0,
-	dividerHitArea: '12px',
-	sizeUnit: '%',
-	direction: 'ltr',
+	dividerHitArea: "12px",
+	sizeUnit: "%",
+	direction: "ltr",
 	collapsible: false,
 	collapsedSize: 0,
 	transitionDuration: 0,
-	transitionTimingFunctionCollapse: 'cubic-bezier(0.4, 0, 0.6, 1)',
-	transitionTimingFunctionExpand: 'cubic-bezier(0, 0, 0.2, 1)',
+	transitionTimingFunctionCollapse: "cubic-bezier(0.4, 0, 0.6, 1)",
+	transitionTimingFunctionExpand: "cubic-bezier(0, 0, 0.2, 1)",
 	snapPoints: () => [],
 	snapThreshold: 12,
 });
 
 /** Size of the primary panel in either percentages or pixels as defined by the sizeUnit property */
-const size = defineModel<number>('size', { default: 50 });
+const size = defineModel<number>("size", { default: 50 });
 
 /** Whether the primary column is collapsed or not */
-const collapsed = defineModel<boolean>('collapsed', { default: false });
+const collapsed = defineModel<boolean>("collapsed", { default: false });
 
-const panelEl = useTemplateRef('split-panel');
-const dividerEl = useTemplateRef('divider');
+const panelEl = useTemplateRef("split-panel");
+const dividerEl = useTemplateRef("divider");
 
 const {
 	sizePercentage,
@@ -99,13 +99,7 @@ useResize(sizePercentage, {
 	primary: () => props.primary,
 });
 
-const {
-	collapseTransitionState,
-	toggle,
-	expand,
-	collapse,
-	transitionDurationCss,
-} = useCollapse(
+const { collapseTransitionState, toggle, expand, collapse, transitionDurationCss } = useCollapse(
 	collapsed,
 	sizePercentage,
 	{ transitionDuration: () => props.transitionDuration, collapsedSize: () => props.collapsedSize },
@@ -120,7 +114,11 @@ defineExpose({ collapse, expand, toggle });
 		class="sp-root"
 		:class="[
 			`sp-${orientation}`,
-			{ 'sp-collapsed': collapsed, 'sp-dragging': isDragging, [`sp-${collapseTransitionState}`]: collapseTransitionState },
+			{
+				'sp-collapsed': collapsed,
+				'sp-dragging': isDragging,
+				[`sp-${collapseTransitionState}`]: collapseTransitionState,
+			},
 		]"
 		data-testid="root"
 	>
@@ -168,7 +166,8 @@ defineExpose({ collapse, expand, toggle });
 	&.sp-horizontal {
 		grid-template-columns: v-bind(gridTemplate);
 
-		&.sp-collapsing, &.sp-expanding {
+		&.sp-collapsing,
+		&.sp-expanding {
 			transition-property: grid-template-columns;
 		}
 
@@ -180,7 +179,8 @@ defineExpose({ collapse, expand, toggle });
 	&.sp-vertical {
 		grid-template-rows: v-bind(gridTemplate);
 
-		&.sp-collapsing, &.sp-expanding {
+		&.sp-collapsing,
+		&.sp-expanding {
 			transition-property: grid-template-rows;
 		}
 
@@ -194,7 +194,8 @@ defineExpose({ collapse, expand, toggle });
 	}
 }
 
-.sp-start, .sp-end {
+.sp-start,
+.sp-end {
 	overflow: hidden;
 }
 
@@ -205,7 +206,7 @@ defineExpose({ collapse, expand, toggle });
 	&:not(.disabled) {
 		& :deep(> :first-child) {
 			&::after {
-				content: '';
+				content: "";
 				position: absolute;
 			}
 		}

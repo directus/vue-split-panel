@@ -1,5 +1,5 @@
 export default defineAppConfig({
 	header: {
-		title: 'Vue Split Panel',
+		title: "Vue Split Panel",
 	},
 });

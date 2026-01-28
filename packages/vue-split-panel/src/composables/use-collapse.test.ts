@@ -1,29 +1,29 @@
-import { describe, expect, it } from 'vite-plus/test';
-import { nextTick, ref } from 'vue';
-import { useCollapse } from './use-collapse';
+import { describe, expect, it } from "vite-plus/test";
+import { nextTick, ref } from "vue";
+import { useCollapse } from "./use-collapse";
 
-describe('useCollapse', () => {
-	it('should return expected methods and properties', () => {
+describe("useCollapse", () => {
+	it("should return expected methods and properties", () => {
 		const collapsed = ref(false);
 		const sizePercentage = ref(50);
 		const options = { transitionDuration: 300, collapsedSize: 0 };
 
 		const result = useCollapse(collapsed, sizePercentage, options);
 
-		expect(result).toHaveProperty('collapse');
-		expect(result).toHaveProperty('expand');
-		expect(result).toHaveProperty('toggle');
-		expect(result).toHaveProperty('collapseTransitionState');
-		expect(result).toHaveProperty('transitionDurationCss');
-		expect(typeof result.collapse).toBe('function');
-		expect(typeof result.expand).toBe('function');
-		expect(typeof result.toggle).toBe('function');
+		expect(result).toHaveProperty("collapse");
+		expect(result).toHaveProperty("expand");
+		expect(result).toHaveProperty("toggle");
+		expect(result).toHaveProperty("collapseTransitionState");
+		expect(result).toHaveProperty("transitionDurationCss");
+		expect(typeof result.collapse).toBe("function");
+		expect(typeof result.expand).toBe("function");
+		expect(typeof result.toggle).toBe("function");
 		expect(result.collapseTransitionState.value).toBeNull();
-		expect(result.transitionDurationCss.value).toBe('300ms');
+		expect(result.transitionDurationCss.value).toBe("300ms");
 	});
 
-	describe('collapse method', () => {
-		it('should set collapsed to true', () => {
+	describe("collapse method", () => {
+		it("should set collapsed to true", () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -36,8 +36,8 @@ describe('useCollapse', () => {
 		});
 	});
 
-	describe('expand method', () => {
-		it('should set collapsed to false', () => {
+	describe("expand method", () => {
+		it("should set collapsed to false", () => {
 			const collapsed = ref(true);
 			const sizePercentage = ref(0);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -50,8 +50,8 @@ describe('useCollapse', () => {
 		});
 	});
 
-	describe('toggle method', () => {
-		it('should set collapsed to the provided value', () => {
+	describe("toggle method", () => {
+		it("should set collapsed to the provided value", () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -66,8 +66,8 @@ describe('useCollapse', () => {
 		});
 	});
 
-	describe('collapsed watcher behavior', () => {
-		it('should store size and set to collapsedSize when collapsing', async () => {
+	describe("collapsed watcher behavior", () => {
+		it("should store size and set to collapsedSize when collapsing", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(75);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -78,10 +78,10 @@ describe('useCollapse', () => {
 			await nextTick();
 
 			expect(sizePercentage.value).toBe(0);
-			expect(collapseTransitionState.value).toBe('collapsing');
+			expect(collapseTransitionState.value).toBe("collapsing");
 		});
 
-		it('should restore size when expanding', async () => {
+		it("should restore size when expanding", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(60);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -98,10 +98,10 @@ describe('useCollapse', () => {
 			await nextTick();
 
 			expect(sizePercentage.value).toBe(60);
-			expect(collapseTransitionState.value).toBe('expanding');
+			expect(collapseTransitionState.value).toBe("expanding");
 		});
 
-		it('should preserve original size through multiple collapse/expand cycles', async () => {
+		it("should preserve original size through multiple collapse/expand cycles", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(42);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -127,7 +127,7 @@ describe('useCollapse', () => {
 			expect(sizePercentage.value).toBe(42);
 		});
 
-		it('should handle size changes between collapse cycles', async () => {
+		it("should handle size changes between collapse cycles", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(30);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -159,8 +159,8 @@ describe('useCollapse', () => {
 		});
 	});
 
-	describe('transition state management', () => {
-		it('should start with null transition state', () => {
+	describe("transition state management", () => {
+		it("should start with null transition state", () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -170,7 +170,7 @@ describe('useCollapse', () => {
 			expect(collapseTransitionState.value).toBeNull();
 		});
 
-		it('should set collapsing state when collapsed becomes true', async () => {
+		it("should set collapsing state when collapsed becomes true", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -180,10 +180,10 @@ describe('useCollapse', () => {
 			collapsed.value = true;
 			await nextTick();
 
-			expect(collapseTransitionState.value).toBe('collapsing');
+			expect(collapseTransitionState.value).toBe("collapsing");
 		});
 
-		it('should set expanding state when collapsed becomes false', async () => {
+		it("should set expanding state when collapsed becomes false", async () => {
 			const collapsed = ref(true);
 			const sizePercentage = ref(0);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -193,22 +193,22 @@ describe('useCollapse', () => {
 			collapsed.value = false;
 			await nextTick();
 
-			expect(collapseTransitionState.value).toBe('expanding');
+			expect(collapseTransitionState.value).toBe("expanding");
 		});
 	});
 
-	describe('transitionDurationCss', () => {
-		it('should return CSS transition duration', () => {
+	describe("transitionDurationCss", () => {
+		it("should return CSS transition duration", () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const options = { transitionDuration: 500, collapsedSize: 0 };
 
 			const { transitionDurationCss } = useCollapse(collapsed, sizePercentage, options);
 
-			expect(transitionDurationCss.value).toBe('500ms');
+			expect(transitionDurationCss.value).toBe("500ms");
 		});
 
-		it('should be reactive to transition duration changes', () => {
+		it("should be reactive to transition duration changes", () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(50);
 			const transitionDuration = ref(300);
@@ -216,15 +216,15 @@ describe('useCollapse', () => {
 
 			const { transitionDurationCss } = useCollapse(collapsed, sizePercentage, options);
 
-			expect(transitionDurationCss.value).toBe('300ms');
+			expect(transitionDurationCss.value).toBe("300ms");
 
 			transitionDuration.value = 600;
-			expect(transitionDurationCss.value).toBe('600ms');
+			expect(transitionDurationCss.value).toBe("600ms");
 		});
 	});
 
-	describe('integration scenarios', () => {
-		it('should handle rapid collapse/expand operations', async () => {
+	describe("integration scenarios", () => {
+		it("should handle rapid collapse/expand operations", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(65);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -234,46 +234,50 @@ describe('useCollapse', () => {
 			// Rapid collapse
 			collapsed.value = true;
 			await nextTick();
-			expect(collapseTransitionState.value).toBe('collapsing');
+			expect(collapseTransitionState.value).toBe("collapsing");
 			expect(sizePercentage.value).toBe(0);
 
 			// Immediate expand before transition ends
 			collapsed.value = false;
 			await nextTick();
-			expect(collapseTransitionState.value).toBe('expanding');
+			expect(collapseTransitionState.value).toBe("expanding");
 			expect(sizePercentage.value).toBe(65);
 		});
 
-		it('should work with methods triggering state changes', async () => {
+		it("should work with methods triggering state changes", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(45);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
 
-			const { collapse, expand, toggle, collapseTransitionState } = useCollapse(collapsed, sizePercentage, options);
+			const { collapse, expand, toggle, collapseTransitionState } = useCollapse(
+				collapsed,
+				sizePercentage,
+				options,
+			);
 
 			// Use collapse method
 			collapse();
 			await nextTick();
 			expect(collapsed.value).toBe(true);
 			expect(sizePercentage.value).toBe(0);
-			expect(collapseTransitionState.value).toBe('collapsing');
+			expect(collapseTransitionState.value).toBe("collapsing");
 
 			// Use expand method
 			expand();
 			await nextTick();
 			expect(collapsed.value).toBe(false);
 			expect(sizePercentage.value).toBe(45);
-			expect(collapseTransitionState.value).toBe('expanding');
+			expect(collapseTransitionState.value).toBe("expanding");
 
 			// Use toggle method
 			toggle(true);
 			await nextTick();
 			expect(collapsed.value).toBe(true);
 			expect(sizePercentage.value).toBe(0);
-			expect(collapseTransitionState.value).toBe('collapsing');
+			expect(collapseTransitionState.value).toBe("collapsing");
 		});
 
-		it('should work with zero initial size', async () => {
+		it("should work with zero initial size", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(0);
 			const options = { transitionDuration: 300, collapsedSize: 0 };
@@ -291,7 +295,7 @@ describe('useCollapse', () => {
 			expect(sizePercentage.value).toBe(0);
 		});
 
-		it('should use custom collapsedSize value', async () => {
+		it("should use custom collapsedSize value", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(60);
 			const options = { transitionDuration: 300, collapsedSize: 10 };
@@ -302,16 +306,16 @@ describe('useCollapse', () => {
 			collapsed.value = true;
 			await nextTick();
 			expect(sizePercentage.value).toBe(10);
-			expect(collapseTransitionState.value).toBe('collapsing');
+			expect(collapseTransitionState.value).toBe("collapsing");
 
 			// Expand should restore original size
 			collapsed.value = false;
 			await nextTick();
 			expect(sizePercentage.value).toBe(60);
-			expect(collapseTransitionState.value).toBe('expanding');
+			expect(collapseTransitionState.value).toBe("expanding");
 		});
 
-		it('should support reactive collapsedSize value', async () => {
+		it("should support reactive collapsedSize value", async () => {
 			const collapsed = ref(false);
 			const sizePercentage = ref(70);
 			const collapsedSize = ref(5);

@@ -1,7 +1,7 @@
-export type Orientation = 'horizontal' | 'vertical';
-export type Direction = 'ltr' | 'rtl';
-export type Primary = 'start' | 'end';
-export type SizeUnit = '%' | 'px';
+export type Orientation = "horizontal" | "vertical";
+export type Direction = "ltr" | "rtl";
+export type Primary = "start" | "end";
+export type SizeUnit = "%" | "px";
 
 export interface UiClasses {
 	start?: string;

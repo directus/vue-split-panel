@@ -1,25 +1,30 @@
 {
 	"name": "@directus/vue-split-panel",
-	"type": "module",
 	"version": "0.8.4",
 	"description": "Split panel component for Vue based on WebAwesome Split Panel",
-	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
+	"keywords": [
+		"components",
+		"panel",
+		"splitter",
+		"ui",
+		"vue"
+	],
 	"homepage": "https://github.com/directus/vue-split-panel",
+	"bugs": {
+		"url": "https://github.com/directus/vue-split-panel/issues"
+	},
+	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/directus/vue-split-panel.git"
 	},
-	"bugs": {
-		"url": "https://github.com/directus/vue-split-panel/issues"
-	},
-	"keywords": [
-		"vue",
-		"ui",
-		"components",
-		"panel",
-		"splitter"
+	"files": [
+		"dist"
 	],
+	"type": "module",
 	"sideEffects": false,
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"import": "./dist/index.js"
@@ -27,11 +32,6 @@
 		"./package.json": "./package.json",
 		"./index.css": "./dist/index.css"
 	},
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"dist"
-	],
 	"scripts": {
 		"build": "vite lib",
 		"dev": "vite lib --watch",
@@ -43,9 +43,6 @@
 		"prepublishOnly": "pnpm run build",
 		"lint": "eslint --flag v10_config_lookup_from_file --cache .",
 		"lint:fix": "pnpm run lint --fix"
-	},
-	"peerDependencies": {
-		"vue": "^3.5.0"
 	},
 	"dependencies": {
 		"@vueuse/core": "13.9.0",
@@ -61,9 +58,12 @@
 		"happy-dom": "20.0.2",
 		"typescript": "5.9.3",
 		"vite": "catalog:",
+		"vite-plus": "catalog:",
 		"vitest": "catalog:",
 		"vue": "3.5.19",
-		"vue-tsc": "3.1.1",
-		"vite-plus": "catalog:"
+		"vue-tsc": "3.1.1"
+	},
+	"peerDependencies": {
+		"vue": "^3.5.0"
 	}
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { SplitPanel } from '../../src';
+import { ref } from "vue";
+import { SplitPanel } from "../../src";
 
 const size = ref(250);
 const collapsed = ref(false);
@@ -23,9 +23,7 @@ const collapsed = ref(false);
 		}"
 	>
 		<template #start>
-			<div id="a" class="panel">
-				Panel A
-			</div>
+			<div id="a" class="panel">Panel A</div>
 		</template>
 
 		<template #divider>
@@ -33,9 +31,7 @@ const collapsed = ref(false);
 		</template>
 
 		<template #end>
-			<div id="b" class="panel">
-				Panel B
-			</div>
+			<div id="b" class="panel">Panel B</div>
 		</template>
 	</SplitPanel>
 </template>

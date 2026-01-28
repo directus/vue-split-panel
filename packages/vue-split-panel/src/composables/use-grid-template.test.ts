@@ -1,10 +1,10 @@
-import type { ComputedRef } from 'vue';
-import type { UseGridTemplateOptions } from './use-grid-template';
-import { describe, expect, it } from 'vite-plus/test';
-import { computed, ref } from 'vue';
-import { useGridTemplate } from './use-grid-template';
+import type { ComputedRef } from "vue";
+import type { UseGridTemplateOptions } from "./use-grid-template";
+import { describe, expect, it } from "vite-plus/test";
+import { computed, ref } from "vue";
+import { useGridTemplate } from "./use-grid-template";
 
-describe('useGridTemplate', () => {
+describe("useGridTemplate", () => {
 	const createOptions = (overrides = {}): UseGridTemplateOptions => ({
 		collapsed: ref(false),
 		minSizePercentage: computed(() => {}) as ComputedRef<number | undefined>,
@@ -12,103 +12,101 @@ describe('useGridTemplate', () => {
 		sizePercentage: computed(() => 50),
 		dividerSize: computed(() => 4),
 		collapsedSizePercentage: computed(() => 0),
-		primary: 'start',
-		orientation: 'horizontal',
+		primary: "start",
+		orientation: "horizontal",
 		...overrides,
 	});
 
-	it('returns collapsed state when collapsed is true', () => {
+	it("returns collapsed state when collapsed is true", () => {
 		const options = createOptions({ collapsed: ref(true) });
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('0% 4px auto');
+		expect(gridTemplate.value).toBe("0% 4px auto");
 	});
 
-	it('uses custom collapsedSizePercentage when collapsed', () => {
+	it("uses custom collapsedSizePercentage when collapsed", () => {
 		const options = createOptions({
 			collapsed: ref(true),
 			collapsedSizePercentage: computed(() => 10),
 		});
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('10% 4px auto');
+		expect(gridTemplate.value).toBe("10% 4px auto");
 	});
 
-	it('uses custom collapsedSizePercentage with end primary', () => {
+	it("uses custom collapsedSizePercentage with end primary", () => {
 		const options = createOptions({
 			collapsed: ref(true),
 			collapsedSizePercentage: computed(() => 15),
-			primary: 'end',
+			primary: "end",
 		});
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('auto 4px 15%');
+		expect(gridTemplate.value).toBe("auto 4px 15%");
 	});
 
-	it('returns basic clamp template when no min/max constraints', () => {
+	it("returns basic clamp template when no min/max constraints", () => {
 		const options = createOptions();
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('clamp(0%, 50%, calc(100% - 4px)) 4px auto');
+		expect(gridTemplate.value).toBe("clamp(0%, 50%, calc(100% - 4px)) 4px auto");
 	});
 
-	it('returns complex clamp template with min/max constraints', () => {
+	it("returns complex clamp template with min/max constraints", () => {
 		const options = createOptions({
 			minSizePercentage: computed(() => 20),
 			maxSizePercentage: computed(() => 80),
 		});
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('clamp(0%, clamp(20%, 50%, 80%), calc(100% - 4px)) 4px auto');
+		expect(gridTemplate.value).toBe("clamp(0%, clamp(20%, 50%, 80%), calc(100% - 4px)) 4px auto");
 	});
 
-	it('respects minSizePercentage as a floor when max is not set', () => {
+	it("respects minSizePercentage as a floor when max is not set", () => {
 		const options = createOptions({
 			minSizePercentage: computed(() => 30),
 		});
 
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe(
-			'clamp(30%, 50%, calc(100% - 4px)) 4px auto',
-		);
+		expect(gridTemplate.value).toBe("clamp(30%, 50%, calc(100% - 4px)) 4px auto");
 	});
 
-	it('reverses order when primary is end and direction is ltr', () => {
-		const options = createOptions({ primary: 'end' });
+	it("reverses order when primary is end and direction is ltr", () => {
+		const options = createOptions({ primary: "end" });
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('auto 4px clamp(0%, 50%, calc(100% - 4px))');
+		expect(gridTemplate.value).toBe("auto 4px clamp(0%, 50%, calc(100% - 4px))");
 	});
 
-	it('handles vertical orientation correctly', () => {
-		const options = createOptions({ orientation: 'vertical' });
+	it("handles vertical orientation correctly", () => {
+		const options = createOptions({ orientation: "vertical" });
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('clamp(0%, 50%, calc(100% - 4px)) 4px auto');
+		expect(gridTemplate.value).toBe("clamp(0%, 50%, calc(100% - 4px)) 4px auto");
 	});
 
-	it('handles vertical orientation with end primary', () => {
+	it("handles vertical orientation with end primary", () => {
 		const options = createOptions({
-			orientation: 'vertical',
-			primary: 'end',
+			orientation: "vertical",
+			primary: "end",
 		});
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('auto 4px clamp(0%, 50%, calc(100% - 4px))');
+		expect(gridTemplate.value).toBe("auto 4px clamp(0%, 50%, calc(100% - 4px))");
 	});
 
-	it('uses custom divider size', () => {
+	it("uses custom divider size", () => {
 		const options = createOptions({ dividerSize: computed(() => 8) });
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('clamp(0%, 50%, calc(100% - 8px)) 8px auto');
+		expect(gridTemplate.value).toBe("clamp(0%, 50%, calc(100% - 8px)) 8px auto");
 	});
 
-	it('handles undefined primary as start', () => {
+	it("handles undefined primary as start", () => {
 		const options = createOptions({ primary: undefined });
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe('clamp(0%, 50%, calc(100% - 4px)) 4px auto');
+		expect(gridTemplate.value).toBe("clamp(0%, 50%, calc(100% - 4px)) 4px auto");
 	});
 });

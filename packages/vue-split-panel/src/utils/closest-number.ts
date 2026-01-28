@@ -29,11 +29,9 @@ export const closestNumber = (numbers: readonly number[], value: number): number
 		if (diff === smallestDiff && closest !== undefined) {
 			if (value === Number.POSITIVE_INFINITY) {
 				if (n > closest) closest = n;
-			}
-			else if (value === Number.NEGATIVE_INFINITY) {
+			} else if (value === Number.NEGATIVE_INFINITY) {
 				if (n < closest) closest = n;
-			}
-			else if (n < closest) {
+			} else if (n < closest) {
 				closest = n; // finite target: choose smaller
 			}
 		}
