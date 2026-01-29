@@ -1,13 +1,17 @@
 import type { ComputedRef } from "vue";
+import type { MockInstance } from "vite-plus/test";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { computed, ref } from "vue";
 import { useKeyboard } from "./use-keyboard";
 
 describe("useKeyboard", () => {
-	const createMockKeyboardEvent = (key: string, shiftKey = false): KeyboardEvent => {
+	const createMockKeyboardEvent = (
+		key: string,
+		shiftKey = false,
+	): { event: KeyboardEvent; preventDefaultSpy: MockInstance } => {
 		const event = new KeyboardEvent("keydown", { key, shiftKey });
-		vi.spyOn(event, "preventDefault");
-		return event;
+		const preventDefaultSpy = vi.spyOn(event, "preventDefault");
+		return { event, preventDefaultSpy };
 	};
 
 	// Helper to build options with defaults and optional overrides
@@ -45,12 +49,12 @@ describe("useKeyboard", () => {
 		const options = createOptions({ disabled: true });
 
 		const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-		const event = createMockKeyboardEvent("ArrowRight");
+		const { event, preventDefaultSpy } = createMockKeyboardEvent("ArrowRight");
 
 		handleKeydown(event);
 
 		expect(sizePercentage.value).toBe(50);
-		expect(event.preventDefault).not.toHaveBeenCalled();
+		expect(preventDefaultSpy).not.toHaveBeenCalled();
 	});
 
 	describe("horizontal orientation", () => {
@@ -60,12 +64,12 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowLeft");
+			const { event, preventDefaultSpy } = createMockKeyboardEvent("ArrowLeft");
 
 			handleKeydown(event);
 
 			expect(sizePercentage.value).toBe(49);
-			expect(event.preventDefault).toHaveBeenCalled();
+			expect(preventDefaultSpy).toHaveBeenCalled();
 		});
 
 		it("should increase size on ArrowRight when primary is start", () => {
@@ -74,12 +78,12 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowRight");
+			const { event, preventDefaultSpy } = createMockKeyboardEvent("ArrowRight");
 
 			handleKeydown(event);
 
 			expect(sizePercentage.value).toBe(51);
-			expect(event.preventDefault).toHaveBeenCalled();
+			expect(preventDefaultSpy).toHaveBeenCalled();
 		});
 
 		it("should increase size on ArrowLeft when primary is end", () => {
@@ -88,7 +92,7 @@ describe("useKeyboard", () => {
 			const options = createOptions({ primary: "end" });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowLeft");
+			const { event } = createMockKeyboardEvent("ArrowLeft");
 
 			handleKeydown(event);
 
@@ -103,7 +107,7 @@ describe("useKeyboard", () => {
 			const options = createOptions({ orientation: "vertical" });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowUp");
+			const { event } = createMockKeyboardEvent("ArrowUp");
 
 			handleKeydown(event);
 
@@ -116,7 +120,7 @@ describe("useKeyboard", () => {
 			const options = createOptions({ orientation: "vertical" });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowDown");
+			const { event } = createMockKeyboardEvent("ArrowDown");
 
 			handleKeydown(event);
 
@@ -131,7 +135,7 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowRight", true);
+			const { event } = createMockKeyboardEvent("ArrowRight", true);
 
 			handleKeydown(event);
 
@@ -146,7 +150,7 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("Home");
+			const { event } = createMockKeyboardEvent("Home");
 
 			handleKeydown(event);
 
@@ -159,7 +163,7 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("End");
+			const { event } = createMockKeyboardEvent("End");
 
 			handleKeydown(event);
 
@@ -172,7 +176,7 @@ describe("useKeyboard", () => {
 			const options = createOptions({ primary: "end" });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("Home");
+			const { event } = createMockKeyboardEvent("Home");
 
 			handleKeydown(event);
 
@@ -187,7 +191,7 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("Enter");
+			const { event } = createMockKeyboardEvent("Enter");
 
 			handleKeydown(event);
 
@@ -200,7 +204,7 @@ describe("useKeyboard", () => {
 			const options = createOptions({ collapsible: false });
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("Enter");
+			const { event } = createMockKeyboardEvent("Enter");
 
 			handleKeydown(event);
 
@@ -215,7 +219,7 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowLeft", true);
+			const { event } = createMockKeyboardEvent("ArrowLeft", true);
 
 			handleKeydown(event);
 
@@ -228,7 +232,7 @@ describe("useKeyboard", () => {
 			const options = createOptions();
 
 			const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-			const event = createMockKeyboardEvent("ArrowRight", true);
+			const { event } = createMockKeyboardEvent("ArrowRight", true);
 
 			handleKeydown(event);
 
@@ -242,12 +246,12 @@ describe("useKeyboard", () => {
 		const options = createOptions();
 
 		const { handleKeydown } = useKeyboard(sizePercentage, collapsed, options);
-		const event = createMockKeyboardEvent("KeyA");
+		const { event, preventDefaultSpy } = createMockKeyboardEvent("KeyA");
 
 		handleKeydown(event);
 
 		expect(sizePercentage.value).toBe(50);
-		expect(event.preventDefault).not.toHaveBeenCalled();
+		expect(preventDefaultSpy).not.toHaveBeenCalled();
 	});
 
 	describe("custom min/max size percentages", () => {
