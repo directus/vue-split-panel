@@ -7,16 +7,16 @@
 	},
 	"dependencies": {
 		"@directus/vue-split-panel": "workspace:*",
-		"@nuxt/kit": "4.2.0",
+		"@nuxt/kit": "4.3.0",
 		"@nuxt/ui-pro": "3.3.7",
-		"better-sqlite3": "12.4.1",
-		"docus": "4.2.0",
-		"nuxt": "4.2.0",
-		"tailwindcss": "4.1.16",
-		"vue": "3.5.22"
+		"better-sqlite3": "12.6.2",
+		"docus": "5.4.4",
+		"nuxt": "4.3.0",
+		"tailwindcss": "4.1.18",
+		"vue": "3.5.27"
 	},
 	"devDependencies": {
-		"@nuxtjs/mdc": "0.18.0",
-		"unist-util-visit": "5.0.0"
+		"@nuxtjs/mdc": "0.20.0",
+		"unist-util-visit": "5.1.0"
 	}
 }

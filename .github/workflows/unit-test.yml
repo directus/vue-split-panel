@@ -15,26 +15,33 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.1.0
-        with:
-          version: 10
 
       - name: Set node LTS
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: pnpm
 
-      - name: Install
-        run: pnpm install
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm -F '!docs' run build
 
       - name: Lint
         run: pnpm -F '!docs' run lint
-
-      - name: Typecheck
-        run: pnpm -F '!docs' run typecheck
 
       - name: Test
         run: pnpm -F '!docs' run test

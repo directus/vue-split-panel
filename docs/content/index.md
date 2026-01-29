@@ -11,36 +11,48 @@ Vue Split Panel
 A split panel component based on Reka-UI and Web Awesome Split Panel
 
 #links
-  :::u-button
-  ---
-  color: neutral
-  size: xl
-  to: /getting-started/installation
-  trailing-icon: i-lucide-arrow-right
-  ---
-  Get started
-  :::
+:::u-button
 
-  :::u-button
-  ---
-  color: neutral
-  icon: simple-icons-github
-  size: xl
-  to: https://github.com/directus/vue-split-panel
-  variant: outline
-  ---
-  Star on GitHub
-  :::
+---
+
+color: neutral
+size: xl
+to: /getting-started/installation
+trailing-icon: i-lucide-arrow-right
+
+---
+
+Get started
+:::
+
+:::u-button
+
+---
+
+color: neutral
+icon: simple-icons-github
+size: xl
+to: https://github.com/directus/vue-split-panel
+variant: outline
+
+---
+
+Star on GitHub
+:::
 
 #default
-  :::div{class="flex flex-col gap-4"}
-    ::::u-page-feature
-    ---
-      title: Accessible
-      icon: lucide-person-standing
-      description: Uses the Window Splitter WAI-ARIA design pattern
-    ---
-    ::::
+:::div{class="flex flex-col gap-4"}
+::::u-page-feature
+
+---
+
+title: Accessible
+icon: lucide-person-standing
+description: Uses the Window Splitter WAI-ARIA design pattern
+
+---
+
+::::
 
     ::::u-page-feature
     ---
@@ -49,7 +61,7 @@ A split panel component based on Reka-UI and Web Awesome Split Panel
       description: Supports keyboard interactions for resizing and collapsing panes
     ---
     ::::
-    
+
     ::::u-page-feature
     ---
       title: Text Direction
@@ -73,5 +85,6 @@ A split panel component based on Reka-UI and Web Awesome Split Panel
       description: Support for transitions when collapsing/expanding the primary panel
     ---
     ::::
-  :::
+
+:::
 ::

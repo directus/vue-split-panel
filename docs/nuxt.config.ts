@@ -1,13 +1,13 @@
 export default defineNuxtConfig({
-	extends: ['docus'],
+	extends: ["docus"],
 	modules: [],
-	css: ['@directus/vue-split-panel/index.css'],
-	compatibilityDate: '2025-07-18',
-	components: [{ path: '~/components', global: true }],
+	css: ["@directus/vue-split-panel/index.css"],
+	compatibilityDate: "2025-07-18",
+	components: [{ path: "~/components", global: true }],
 	robots: {
-		robotsTxt: false
+		robotsTxt: false,
 	},
 	llms: {
-		domain: 'https://directus.github.io/vue-split-panel',
+		domain: "https://directus.github.io/vue-split-panel",
 	},
 });

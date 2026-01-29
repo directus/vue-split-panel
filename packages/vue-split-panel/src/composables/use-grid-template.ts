@@ -1,6 +1,6 @@
-import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue';
-import type { Orientation, Primary } from '../types';
-import { computed, toValue } from 'vue';
+import type { ComputedRef, MaybeRefOrGetter, Ref } from "vue";
+import type { Orientation, Primary } from "../types";
+import { computed, toValue } from "vue";
 
 export interface UseGridTemplateOptions {
 	collapsed: Ref<boolean>;
@@ -19,23 +19,22 @@ export const useGridTemplate = (options: UseGridTemplateOptions) => {
 
 		if (options.collapsed.value) {
 			primary = `${options.collapsedSizePercentage.value}%`;
-		}
-		else if (options.minSizePercentage.value !== undefined && options.maxSizePercentage.value !== undefined) {
+		} else if (
+			options.minSizePercentage.value !== undefined &&
+			options.maxSizePercentage.value !== undefined
+		) {
 			primary = `clamp(0%, clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, ${options.maxSizePercentage.value}%), calc(100% - ${options.dividerSize.value}px))`;
-		}
-		else if (options.minSizePercentage.value !== undefined) {
+		} else if (options.minSizePercentage.value !== undefined) {
 			primary = `clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
-		}
-		else {
+		} else {
 			primary = `clamp(0%, ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
 		}
 
-		const secondary = 'auto';
+		const secondary = "auto";
 
-		if (!toValue(options.primary) || toValue(options.primary) === 'start') {
+		if (!toValue(options.primary) || toValue(options.primary) === "start") {
 			return `${primary} ${options.dividerSize.value}px ${secondary}`;
-		}
-		else {
+		} else {
 			return `${secondary} ${options.dividerSize.value}px ${primary}`;
 		}
 	});

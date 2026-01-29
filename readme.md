@@ -10,19 +10,15 @@ pnpm add @directus/vue-split-panel
 
 ```vue
 <script lang="ts" setup>
-import { SplitPanel } from '@directus/vue-split-panel';
-import '@directus/vue-split-panel/index.css';
+import { SplitPanel } from "@directus/vue-split-panel";
+import "@directus/vue-split-panel/index.css";
 </script>
 
 <template>
 	<SplitPanel>
-		<template #start>
-			Panel A
-		</template>
-		
-		<template #end>
-			Panel B
-		</template>
+		<template #start> Panel A </template>
+
+		<template #end> Panel B </template>
 	</SplitPanel>
 </template>
 ```

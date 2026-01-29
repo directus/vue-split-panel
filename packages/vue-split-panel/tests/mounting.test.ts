@@ -1,23 +1,23 @@
-import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
-import { SplitPanel } from '../src';
+import { mount } from "@vue/test-utils";
+import { describe, expect, it } from "vite-plus/test";
+import { SplitPanel } from "../src";
 
 // There's a tsdown/vitest issue causing false positives here, so we skip these tests for now
 //   => TypeError: Cannot define property split-panel, object is not extensible
-describe.todo('basic mounting and rendering', () => {
-	it('mounts without crashing', () => {
+describe.todo("basic mounting and rendering", () => {
+	it("mounts without crashing", () => {
 		const wrapper = mount(SplitPanel);
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('renders start, divider, and end slots', () => {
+	it("renders start, divider, and end slots", () => {
 		const wrapper = mount(SplitPanel);
 		expect(wrapper.find('[data-testid="start"]').exists()).toBe(true);
 		expect(wrapper.find('[data-testid="divider"]').exists()).toBe(true);
 		expect(wrapper.find('[data-testid="end"]').exists()).toBe(true);
 	});
 
-	it('renders slot content correctly', () => {
+	it("renders slot content correctly", () => {
 		const wrapper = mount(SplitPanel, {
 			slots: {
 				start: '<div class="test-panel-start">Start Panel</div>',
@@ -26,16 +26,16 @@ describe.todo('basic mounting and rendering', () => {
 			},
 		});
 
-		expect(wrapper.find('.test-panel-start').text()).toBe('Start Panel');
-		expect(wrapper.find('.test-divider').text()).toBe('Divider');
-		expect(wrapper.find('.test-panel-end').text()).toBe('End Panel');
+		expect(wrapper.find(".test-panel-start").text()).toBe("Start Panel");
+		expect(wrapper.find(".test-divider").text()).toBe("Divider");
+		expect(wrapper.find(".test-panel-end").text()).toBe("End Panel");
 	});
 
-	it('renders default divider div when no divider slot content is given', () => {
+	it("renders default divider div when no divider slot content is given", () => {
 		const wrapper = mount(SplitPanel);
 		const divider = wrapper.find('[data-testid="divider"]');
 
 		expect(divider.exists()).toBe(true);
-		expect(divider.find('div').exists()).toBe(true);
+		expect(divider.find("div").exists()).toBe(true);
 	});
 });
