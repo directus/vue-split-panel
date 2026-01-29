@@ -43,8 +43,5 @@ jobs:
       - name: Lint
         run: pnpm -F '!docs' run lint
 
-      # - name: Typecheck
-      #   run: pnpm -F '!docs' run typecheck
-
       - name: Test
         run: pnpm -F '!docs' run test

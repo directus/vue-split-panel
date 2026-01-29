@@ -14,7 +14,7 @@
 		"esModuleInterop": true,
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
 	},
-	"include": ["src"]
+	"include": ["env.d.ts", "src/**/*", "src/**/*.vue", "playground"]
 }

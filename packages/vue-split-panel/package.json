@@ -40,7 +40,7 @@
 		"test:coverage": "vite test --coverage",
 		"release": "bumpp && pnpm publish",
 		"prepublishOnly": "pnpm run build",
-		"lint": "vite lint",
+		"lint": "vite lint --type-aware --type-check",
 		"lint:fix": "vite lint --fix"
 	},
 	"dependencies": {
