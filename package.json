@@ -3,5 +3,5 @@
 	"devDependencies": {
 		"vite-plus": "catalog:"
 	},
-	"packageManager": "pnpm@10.28.2"
+	"packageManager": "pnpm@10.30.0"
 }

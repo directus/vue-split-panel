@@ -44,19 +44,19 @@
 		"lint:fix": "vite lint --fix"
 	},
 	"dependencies": {
-		"@vueuse/core": "14.1.0",
+		"@vueuse/core": "14.2.1",
 		"test": "3.3.0"
 	},
 	"devDependencies": {
-		"@types/node": "25.1.0",
-		"@vitejs/plugin-vue": "6.0.3",
+		"@types/node": "25.3.0",
+		"@vitejs/plugin-vue": "6.0.4",
 		"@vitest/coverage-v8": "4.0.18",
 		"@vue/test-utils": "2.4.6",
-		"bumpp": "10.4.0",
-		"happy-dom": "20.4.0",
+		"bumpp": "10.4.1",
+		"happy-dom": "20.6.3",
 		"typescript": "5.9.3",
 		"vite-plus": "catalog:",
-		"vue": "3.5.27"
+		"vue": "3.5.28"
 	},
 	"peerDependencies": {
 		"vue": "^3.5.0"
