@@ -4,4 +4,4 @@
  * @param pixels - The pixel value to convert to percentage
  * @returns The percentage value (0-100) that the pixels represent of the total area
  */
-export const pixelsToPercentage = (area: number, pixels: number) => (pixels / area) * 100;
+export const pixelsToPercentage = (area: number, pixels: number) => (area === 0 ? 0 : (pixels / area) * 100);
