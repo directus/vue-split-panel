@@ -24,6 +24,11 @@ describe("pixelsToPercentage", () => {
 		expect(pixelsToPercentage(1e9, 1e6)).toBeCloseTo(0.1, 6);
 	});
 
+	it("returns 0 when area is 0 (avoids NaN/Infinity on mount)", () => {
+		expect(pixelsToPercentage(0, 0)).toBe(0);
+		expect(pixelsToPercentage(0, 400)).toBe(0);
+	});
+
 	it("does not clamp out-of-range values (negative or > 100%)", () => {
 		expect(pixelsToPercentage(500, -50)).toBe(-10);
 		expect(pixelsToPercentage(500, 750)).toBe(150);
