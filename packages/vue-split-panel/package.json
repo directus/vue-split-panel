@@ -44,8 +44,7 @@
 		"lint:fix": "vite lint --fix"
 	},
 	"dependencies": {
-		"@vueuse/core": "14.2.1",
-		"test": "3.3.0"
+		"@vueuse/core": "14.2.1"
 	},
 	"devDependencies": {
 		"@types/node": "25.3.0",
