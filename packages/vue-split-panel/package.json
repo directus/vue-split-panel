@@ -1,6 +1,6 @@
 {
 	"name": "@directus/vue-split-panel",
-	"version": "0.8.7",
+	"version": "0.8.8",
 	"description": "Split panel component for Vue based on WebAwesome Split Panel",
 	"keywords": [
 		"components",
