@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	orientation: "horizontal",
 	disabled: false,
 	minSize: 0,
-	dividerHitArea: "12px",
+	dividerHitArea: "4px",
 	sizeUnit: "%",
 	direction: "ltr",
 	collapsible: false,
