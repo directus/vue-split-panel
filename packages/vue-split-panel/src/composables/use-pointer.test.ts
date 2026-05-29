@@ -196,6 +196,39 @@ describe("usePointer", () => {
 			expect(collapsed.value).toBe(false);
 		});
 
+		it("should not collapse when dragToToggle is false", async () => {
+			options.dragToToggle = ref(false);
+			usePointer(collapsed, sizePercentage, sizePixels, options);
+
+			mockDragX.value = 30; // Below minSize (50) - collapseThreshold (10) = 40
+			await nextTick();
+
+			expect(collapsed.value).toBe(false);
+		});
+
+		it("should not expand when dragToToggle is false", async () => {
+			collapsed.value = true;
+			options.dragToToggle = ref(false);
+			options.collapseThreshold = ref(15);
+			usePointer(collapsed, sizePercentage, sizePixels, options);
+
+			mockDragX.value = 20; // Above collapseThreshold (15)
+			await nextTick();
+
+			expect(collapsed.value).toBe(true);
+		});
+
+		it("should still update sizePercentage when dragToToggle is false", async () => {
+			options.dragToToggle = ref(false);
+			usePointer(collapsed, sizePercentage, sizePixels, options);
+
+			mockDragX.value = 100;
+			await nextTick();
+
+			expect(collapsed.value).toBe(false);
+			expect(sizePercentage.value).toBe(25);
+		});
+
 		it("should snap to snap points within threshold", async () => {
 			options.snapPixels = computed(() => [100, 200, 300]);
 			options.snapThreshold = ref(8);
@@ -204,6 +237,19 @@ describe("usePointer", () => {
 			mockDragX.value = 195; // Within 8px of snap point 200
 			await nextTick();
 			expect(sizePercentage.value).toBe(50); // 200/400 * 100 = 50%
+		});
+
+		it("should still snap to snap points when dragToToggle is false", async () => {
+			options.dragToToggle = ref(false);
+			options.snapPixels = computed(() => [100, 200, 300]);
+			options.snapThreshold = ref(8);
+			usePointer(collapsed, sizePercentage, sizePixels, options);
+
+			mockDragX.value = 195;
+			await nextTick();
+
+			expect(collapsed.value).toBe(false);
+			expect(sizePercentage.value).toBe(50);
 		});
 
 		it("should not snap when outside snap threshold", async () => {
