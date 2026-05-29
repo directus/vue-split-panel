@@ -119,6 +119,7 @@ defineExpose({ collapse, expand, toggle });
 			{
 				'sp-collapsed': collapsed,
 				'sp-dragging': isDragging,
+				'sp-drag-toggle': dragToToggle,
 				[`sp-${collapseTransitionState}`]: collapseTransitionState,
 			},
 		]"
@@ -173,7 +174,7 @@ defineExpose({ collapse, expand, toggle });
 			transition-property: grid-template-columns;
 		}
 
-		&.sp-dragging {
+		&.sp-dragging:is(.sp-drag-toggle, :not(.sp-collapsed)) {
 			cursor: ew-resize;
 		}
 	}
@@ -186,7 +187,7 @@ defineExpose({ collapse, expand, toggle });
 			transition-property: grid-template-rows;
 		}
 
-		&.sp-dragging {
+		&.sp-dragging:is(.sp-drag-toggle, :not(.sp-collapsed)) {
 			cursor: ns-resize;
 		}
 	}
@@ -204,40 +205,38 @@ defineExpose({ collapse, expand, toggle });
 .sp-divider {
 	position: relative;
 	z-index: 1;
+}
 
-	&:not(.disabled) {
-		& :deep(> :first-child) {
-			&::after {
-				content: "";
-				position: absolute;
-			}
-		}
+.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed))
+	.sp-divider:not(.sp-disabled)
+	:deep(> :first-child)::after {
+	content: "";
+	position: absolute;
+}
 
-		&.sp-horizontal {
-			block-size: 100%;
-			inline-size: max-content;
+.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed)) .sp-divider:not(.sp-disabled).sp-horizontal {
+	block-size: 100%;
+	inline-size: max-content;
 
-			& :deep(> :first-child)::after {
-				block-size: 100%;
-				inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
-				inset-block-start: 0;
-				inline-size: v-bind(dividerHitArea);
-				cursor: ew-resize;
-			}
-		}
+	& :deep(> :first-child)::after {
+		block-size: 100%;
+		inset-inline-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+		inset-block-start: 0;
+		inline-size: v-bind(dividerHitArea);
+		cursor: ew-resize;
+	}
+}
 
-		&.sp-vertical {
-			inline-size: 100%;
-			block-size: max-content;
+.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed)) .sp-divider:not(.sp-disabled).sp-vertical {
+	inline-size: 100%;
+	block-size: max-content;
 
-			& :deep(> :first-child)::after {
-				inline-size: 100%;
-				inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
-				inset-inline-start: 0;
-				block-size: v-bind(dividerHitArea);
-				cursor: ns-resize;
-			}
-		}
+	& :deep(> :first-child)::after {
+		inline-size: 100%;
+		inset-block-start: calc(v-bind(dividerHitArea) / -2 + v-bind(dividerSize) * 1px / 2);
+		inset-inline-start: 0;
+		block-size: v-bind(dividerHitArea);
+		cursor: ns-resize;
 	}
 }
 </style>
