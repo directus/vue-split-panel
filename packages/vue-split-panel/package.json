@@ -33,20 +33,21 @@
 		"./index.css": "./dist/index.css"
 	},
 	"scripts": {
-		"build": "vite lib",
-		"dev": "vite lib --watch",
-		"playground": "vite dev",
-		"test": "vite test",
-		"test:coverage": "vite test --coverage",
+		"build": "vp pack",
+		"dev": "vp pack --watch",
+		"playground": "vp dev",
+		"test": "vp test --run",
+		"test:coverage": "vp test --run --coverage",
 		"release": "bumpp && pnpm publish",
 		"prepublishOnly": "pnpm run build",
-		"lint": "vite lint --type-aware --type-check",
-		"lint:fix": "vite lint --fix"
+		"lint": "vp lint --type-aware --type-check",
+		"lint:fix": "vp lint --fix"
 	},
 	"dependencies": {
 		"@vueuse/core": "14.3.0"
 	},
 	"devDependencies": {
+		"@tsdown/css": "0.22.0",
 		"@types/node": "25.9.1",
 		"@vitejs/plugin-vue": "6.0.7",
 		"@vitest/coverage-v8": "4.1.7",
@@ -55,7 +56,8 @@
 		"happy-dom": "20.9.0",
 		"typescript": "6.0.3",
 		"vite-plus": "catalog:",
-		"vue": "3.5.35"
+		"vue": "3.5.35",
+		"vue-tsc": "3.2.9"
 	},
 	"peerDependencies": {
 		"vue": "^3.5.0"
