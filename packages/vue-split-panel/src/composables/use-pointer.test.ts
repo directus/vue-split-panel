@@ -44,6 +44,7 @@ describe("usePointer", () => {
 		options = {
 			disabled: ref(false),
 			collapsible: ref(true),
+			dragToToggle: ref(true),
 			primary: ref("start"),
 			orientation: ref("horizontal"),
 			direction: ref("ltr"),

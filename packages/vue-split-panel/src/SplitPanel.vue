@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<SplitPanelProps>(), {
 	sizeUnit: "%",
 	direction: "ltr",
 	collapsible: false,
+	dragToToggle: true,
 	collapsedSize: 0,
 	transitionDuration: 0,
 	transitionTimingFunctionCollapse: "cubic-bezier(0.4, 0, 0.6, 1)",
@@ -69,6 +70,7 @@ const { handleKeydown } = useKeyboard(sizePercentage, collapsed, {
 const { isDragging, handleDblClick } = usePointer(collapsed, sizePercentage, sizePixels, {
 	collapseThreshold: () => props.collapseThreshold,
 	collapsible: () => props.collapsible,
+	dragToToggle: () => props.dragToToggle,
 	direction: () => props.direction,
 	disabled: () => props.disabled,
 	orientation: () => props.orientation,

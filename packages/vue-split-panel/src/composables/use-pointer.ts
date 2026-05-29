@@ -8,6 +8,7 @@ import { pixelsToPercentage } from "../utils/pixels-to-percentage";
 export interface UsePointerOptions {
 	disabled: MaybeRefOrGetter<boolean>;
 	collapsible: MaybeRefOrGetter<boolean>;
+	dragToToggle: MaybeRefOrGetter<boolean>;
 	primary: MaybeRefOrGetter<Primary | undefined>;
 	orientation: MaybeRefOrGetter<Orientation>;
 	direction: MaybeRefOrGetter<Direction>;
@@ -47,7 +48,11 @@ export const usePointer = (
 			newPositionInPixels = options.componentSize.value - newPositionInPixels;
 		}
 
-		if (toValue(options.collapsible) && toValue(options.collapseThreshold) !== undefined) {
+		if (
+			toValue(options.collapsible) &&
+			toValue(options.dragToToggle) &&
+			toValue(options.collapseThreshold) !== undefined
+		) {
 			let threshold: number;
 
 			if (thresholdLocation === "collapse")

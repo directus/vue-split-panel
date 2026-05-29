@@ -58,6 +58,12 @@ export interface SplitPanelProps {
 	 */
 	collapsible?: boolean;
 
+	/**
+	 * Whether dragging past the collapse threshold should collapse or expand the primary panel
+	 * @default true
+	 */
+	dragToToggle?: boolean;
+
 	/** How far to drag beyond the minSize to collapse/expand the primary panel */
 	collapseThreshold?: number;
 
