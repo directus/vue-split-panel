@@ -11,9 +11,9 @@ onlyBuiltDependencies:
   - unrs-resolver
   - vue-demi
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@latest
-  vitest: npm:@voidzero-dev/vite-plus-test@latest
-  vite-plus: latest
+  vite: npm:@voidzero-dev/vite-plus-core@0.1.23
+  vitest: npm:@voidzero-dev/vite-plus-test@0.1.23
+  vite-plus: 0.1.23
 overrides:
   vite: "catalog:"
   vitest: "catalog:"
@@ -24,3 +24,21 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+allowBuilds:
+  '@parcel/watcher': true
+  better-sqlite3: true
+  esbuild: true
+  sharp: true
+  vue-demi: true
+minimumReleaseAgeExclude:
+  - '@voidzero-dev/vite-plus-core@0.1.23'
+  - '@voidzero-dev/vite-plus-darwin-arm64@0.1.23'
+  - '@voidzero-dev/vite-plus-darwin-x64@0.1.23'
+  - '@voidzero-dev/vite-plus-linux-arm64-gnu@0.1.23'
+  - '@voidzero-dev/vite-plus-linux-arm64-musl@0.1.23'
+  - '@voidzero-dev/vite-plus-linux-x64-gnu@0.1.23'
+  - '@voidzero-dev/vite-plus-linux-x64-musl@0.1.23'
+  - '@voidzero-dev/vite-plus-test@0.1.23'
+  - '@voidzero-dev/vite-plus-win32-arm64-msvc@0.1.23'
+  - '@voidzero-dev/vite-plus-win32-x64-msvc@0.1.23'
+  - vite-plus@0.1.23
