@@ -38,10 +38,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm -F '!docs' run build
+        run: pnpm run build
 
       - name: Lint
-        run: pnpm -F '!docs' run lint
+        run: pnpm run lint
 
       - name: Test
-        run: pnpm -F '!docs' run test
+        run: pnpm run test

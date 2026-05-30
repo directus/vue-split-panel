@@ -177,6 +177,19 @@ describe("usePointer", () => {
 			expect(collapsed.value).toBe(true);
 		});
 
+		it("should not overwrite sizePercentage when drag-to-collapse crosses threshold", async () => {
+			sizePercentage.value = 50;
+			options.minSizePixels = computed(() => 50);
+			options.collapseThreshold = ref(10);
+			usePointer(collapsed, sizePercentage, sizePixels, options);
+
+			mockDragX.value = 30; // Below minSize (50) - collapseThreshold (10) = 40
+			await nextTick();
+
+			expect(collapsed.value).toBe(true);
+			expect(sizePercentage.value).toBe(50);
+		});
+
 		it("should expand when dragging above expand threshold", async () => {
 			collapsed.value = true;
 			options.collapseThreshold = ref(15);
@@ -299,6 +312,7 @@ describe("usePointer", () => {
 		});
 
 		it("should clamp sizePercentage between 0 and 100", async () => {
+			options.dragToToggle = ref(false);
 			usePointer(collapsed, sizePercentage, sizePixels, options);
 
 			mockDragX.value = -50; // Negative position

@@ -99,12 +99,13 @@ useResize(sizePercentage, {
 	panelEl,
 	orientation: () => props.orientation,
 	primary: () => props.primary,
+	collapsed,
+	sizeUnit: () => props.sizeUnit,
 });
 
 const { collapseTransitionState, toggle, expand, collapse, transitionDurationCss } = useCollapse(
 	collapsed,
-	sizePercentage,
-	{ transitionDuration: () => props.transitionDuration, collapsedSize: () => props.collapsedSize },
+	{ transitionDuration: () => props.transitionDuration },
 );
 
 defineExpose({ collapse, expand, toggle });
@@ -207,14 +208,19 @@ defineExpose({ collapse, expand, toggle });
 	z-index: 1;
 }
 
+.sp-root:not(:is(.sp-drag-toggle, :not(.sp-collapsed))) > .sp-divider :deep(> :first-child),
+.sp-root > .sp-divider.sp-disabled :deep(> :first-child) {
+	pointer-events: none;
+}
+
 .sp-root:is(.sp-drag-toggle, :not(.sp-collapsed))
-	.sp-divider:not(.sp-disabled)
+	> .sp-divider:not(.sp-disabled)
 	:deep(> :first-child)::after {
 	content: "";
 	position: absolute;
 }
 
-.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed)) .sp-divider:not(.sp-disabled).sp-horizontal {
+.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed)) > .sp-divider:not(.sp-disabled).sp-horizontal {
 	block-size: 100%;
 	inline-size: max-content;
 
@@ -227,7 +233,7 @@ defineExpose({ collapse, expand, toggle });
 	}
 }
 
-.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed)) .sp-divider:not(.sp-disabled).sp-vertical {
+.sp-root:is(.sp-drag-toggle, :not(.sp-collapsed)) > .sp-divider:not(.sp-disabled).sp-vertical {
 	inline-size: 100%;
 	block-size: max-content;
 
