@@ -61,6 +61,7 @@ export const usePointer = (
 
 			if (newPositionInPixels < threshold && collapsed.value === false) {
 				collapsed.value = true;
+				return;
 			} else if (newPositionInPixels > threshold && collapsed.value === true) {
 				collapsed.value = false;
 			}

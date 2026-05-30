@@ -1,7 +1,4 @@
-packages:
-  - packages/*
-  - docs
-
+# pnpm v11 reads project-level settings from this file, even without workspace package globs.
 onlyBuiltDependencies:
   - "@parcel/watcher"
   - "@tailwindcss/oxide"
@@ -10,13 +7,9 @@ onlyBuiltDependencies:
   - sharp
   - unrs-resolver
   - vue-demi
-catalog:
+overrides:
   vite: npm:@voidzero-dev/vite-plus-core@0.1.23
   vitest: npm:@voidzero-dev/vite-plus-test@0.1.23
-  vite-plus: 0.1.23
-overrides:
-  vite: "catalog:"
-  vitest: "catalog:"
 peerDependencyRules:
   allowAny:
     - vite

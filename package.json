@@ -1,7 +1,76 @@
 {
+	"name": "@directus/vue-split-panel",
+	"version": "0.8.12",
+	"description": "Split panel component for Vue based on WebAwesome Split Panel",
+	"keywords": [
+		"components",
+		"panel",
+		"splitter",
+		"ui",
+		"vue"
+	],
+	"homepage": "https://github.com/directus/vue-split-panel",
+	"bugs": {
+		"url": "https://github.com/directus/vue-split-panel/issues"
+	},
+	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/directus/vue-split-panel.git"
+	},
+	"files": [
+		"dist"
+	],
 	"type": "module",
+	"sideEffects": false,
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js"
+		},
+		"./package.json": "./package.json",
+		"./index.css": "./dist/style.css"
+	},
+	"scripts": {
+		"build": "vp pack",
+		"dev": "vp pack --watch",
+		"playground": "vp dev",
+		"docs:dev": "nuxt dev docs",
+		"docs:build": "nuxt build docs",
+		"test": "vp test --run",
+		"test:coverage": "vp test --run --coverage",
+		"release": "bumpp && pnpm publish",
+		"prepublishOnly": "pnpm run build",
+		"lint": "vp lint --type-aware --type-check",
+		"lint:fix": "vp lint --fix"
+	},
+	"dependencies": {
+		"@vueuse/core": "14.3.0"
+	},
 	"devDependencies": {
-		"vite-plus": "catalog:"
+		"@nuxt/kit": "4.3.0",
+		"@nuxt/ui-pro": "3.3.7",
+		"@nuxtjs/mdc": "0.20.0",
+		"@tsdown/css": "0.22.0",
+		"@types/node": "25.9.1",
+		"@vitejs/plugin-vue": "6.0.7",
+		"@vitest/coverage-v8": "4.1.7",
+		"@vue/test-utils": "2.4.10",
+		"better-sqlite3": "12.6.2",
+		"bumpp": "11.1.0",
+		"docus": "5.4.4",
+		"happy-dom": "20.9.0",
+		"nuxt": "4.3.0",
+		"tailwindcss": "4.1.18",
+		"typescript": "6.0.3",
+		"unist-util-visit": "5.1.0",
+		"vite-plus": "0.1.23",
+		"vue": "3.5.35",
+		"vue-tsc": "3.2.9"
+	},
+	"peerDependencies": {
+		"vue": "^3.5.0"
 	},
 	"packageManager": "pnpm@11.5.0"
 }

@@ -20,8 +20,8 @@ jobs:
           node-version: lts/*
           cache: pnpm
       - run: pnpm install
-      - run: pnpm -F '!docs' build
-      - run: NUXT_APP_BASE_URL=/vue-split-panel/ pnpm -F docs build --preset github_pages
+      - run: pnpm run build
+      - run: NUXT_APP_BASE_URL=/vue-split-panel/ pnpm docs:build --preset github_pages
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
       - name: Upload artifact

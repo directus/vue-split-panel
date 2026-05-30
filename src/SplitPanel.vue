@@ -103,8 +103,7 @@ useResize(sizePercentage, {
 
 const { collapseTransitionState, toggle, expand, collapse, transitionDurationCss } = useCollapse(
 	collapsed,
-	sizePercentage,
-	{ transitionDuration: () => props.transitionDuration, collapsedSize: () => props.collapsedSize },
+	{ transitionDuration: () => props.transitionDuration },
 );
 
 defineExpose({ collapse, expand, toggle });
