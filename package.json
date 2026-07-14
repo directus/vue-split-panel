@@ -67,7 +67,7 @@
 		"tailwindcss": "4.1.18",
 		"typescript": "6.0.3",
 		"unist-util-visit": "5.1.0",
-		"vite-plus": "0.1.23",
+		"vite-plus": "0.1.24",
 		"vue": "3.5.35",
 		"vue-tsc": "3.2.9"
 	},
