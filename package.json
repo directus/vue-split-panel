@@ -49,8 +49,10 @@
 		"@vueuse/core": "14.3.0"
 	},
 	"devDependencies": {
+		"@iconify-json/lucide": "1.2.110",
+		"@iconify-json/simple-icons": "1.2.84",
+		"@iconify-json/vscode-icons": "1.2.52",
 		"@nuxt/kit": "4.3.0",
-		"@nuxt/ui-pro": "3.3.7",
 		"@nuxtjs/mdc": "0.20.0",
 		"@tsdown/css": "0.22.0",
 		"@types/node": "25.9.1",
