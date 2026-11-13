@@ -69,7 +69,23 @@ describe("useGridTemplate", () => {
 
 		const { gridTemplate } = useGridTemplate(options);
 
-		expect(gridTemplate.value).toBe("clamp(30%, 50%, calc(100% - 4px)) 4px auto");
+		expect(gridTemplate.value).toBe(
+			"clamp(min(30%, calc(100% - 4px)), 50%, calc(100% - 4px)) 4px auto",
+		);
+	});
+
+	it("caps minSizePercentage at the space left beside the divider", () => {
+		// A 400px minimum in a 313px panel resolves past 100%
+		const options = createOptions({
+			minSizePercentage: computed(() => 127.8),
+			sizePercentage: computed(() => 127.8),
+		});
+
+		const { gridTemplate } = useGridTemplate(options);
+
+		expect(gridTemplate.value).toBe(
+			"clamp(min(127.8%, calc(100% - 4px)), 127.8%, calc(100% - 4px)) 4px auto",
+		);
 	});
 
 	it("reverses order when primary is end and direction is ltr", () => {
