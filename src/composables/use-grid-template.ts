@@ -25,7 +25,8 @@ export const useGridTemplate = (options: UseGridTemplateOptions) => {
 		) {
 			primary = `clamp(0%, clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, ${options.maxSizePercentage.value}%), calc(100% - ${options.dividerSize.value}px))`;
 		} else if (options.minSizePercentage.value !== undefined) {
-			primary = `clamp(${options.minSizePercentage.value}%, ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
+			// clamp() lets the minimum beat the maximum, so an oversized minSize would push the divider past the container edge
+			primary = `clamp(min(${options.minSizePercentage.value}%, calc(100% - ${options.dividerSize.value}px)), ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
 		} else {
 			primary = `clamp(0%, ${options.sizePercentage.value}%, calc(100% - ${options.dividerSize.value}px))`;
 		}
